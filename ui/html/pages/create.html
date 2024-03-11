@@ -1,0 +1,31 @@
+{{define "title"}}Create{{end}}
+{{define "main"}}
+<div class="create">
+  <form action="/post/create" method="POST" enctype="multipart/form-data">
+    <h2>New Post</h2>
+    <textarea spellcheck="false" maxlength="77" placeholder="Title" required name="title"></textarea>
+    <textarea class="myarea" spellcheck="false" maxlength="2000" placeholder="Type something here..." name="content"
+      required></textarea>
+      <!-- Drop and draw -->
+      <div id="drop-area">
+        <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
+        <p>Drag and drop an image here or click to select</p>
+        <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
+      </div>
+      <div class="post-image-message"></div>
+
+    <div class="container">
+      <ul class="ks-cboxtags">
+        <li><input type="checkbox" id="checkboxOne" name="Game" value="Game"><label for="checkboxOne">Game</label></li>
+        <li><input type="checkbox" id="checkboxTwo" name="Films" value="Films"><label for="checkboxTwo">Films</label></li>
+        <li><input type="checkbox" id="checkboxThree" name="Programming" value="Programming"><label for="checkboxThree">Programming</label></li>
+        <li><input type="checkbox" id="checkboxFour" name="Anime" value="Anime"><label for="checkboxFour">Anime</label></li>
+        <li><input type="checkbox" id="checkboxFive" name="Sport" value="Sport"><label for="checkboxFive">Sport</label></li>
+      </ul>
+    </div>
+    <div class="center">
+      <button type="submit" class="create_btn">Create</button>
+    </div>
+  </form>
+</div>
+{{end}}

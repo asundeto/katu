@@ -1,0 +1,20 @@
+{{ define "nav"}}
+<header class="header">
+    <a href="/"><h2 class="logo">Forum</h2></a>
+    <nav class="navigation">
+      <a class="nav-menu" href="/">Home</a>
+      <a class="nav-menu" href="/post/create">Create a Post</a>
+      <a class="nav-menu" href="/?category=created">My Posts</a>
+      <a class="nav-menu" href="/?category=liked">Liked Posts</a>
+      {{if .IsAuthenticated}}
+      <a class="btnLogin" href="/user/profile">{{ .UserName}}</a>
+      <a class="btnLogin" href="/user/logout">Logout</a>
+      {{else}}
+      <a class="btnLogin" href="/user/login">Login</a>
+      {{end}}
+    </nav>
+    <span class="icon-menu">
+      <img class="menu-img" src="/static/img/menu.png" alt="">
+    </span>
+</header>
+{{end}}

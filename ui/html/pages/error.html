@@ -1,0 +1,12 @@
+{{define "title"}}Error{{end}}
+{{define "main"}}
+<div class="box">
+    <div class="error-box">
+        <img class="error-img" src="/static/img/error_gif.gif" alt="">
+        <div class="error_info_box">
+            <div class="error-status">{{.ErrorStruct.Status}} ERROR</div>
+            <div class="error-text">{{.ErrorStruct.Text}}</div>
+        </div>
+    </div>
+</div>
+{{end}}

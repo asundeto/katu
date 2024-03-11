@@ -1,0 +1,43 @@
+{{define "title"}}Home{{end}}
+
+{{define "main"}}
+<div class="box">
+  <div>
+    <div class="category-slider">
+        <div class="filter_new_back">
+          <a id="filter_new" class="filter_new" href="/post/category/game">Game</a>
+          <a class="filter_new" href="/post/category/films">Films</a>
+          <a class="filter_new" href="/post/category/programming">Programming</a>
+          <a class="filter_new" href="/post/category/anime">Anime</a>
+          <a class="filter_new" href="/post/category/sport">Sport</a>
+        </div>
+    </div>
+  </div>
+  <div class="post_table">
+    {{if .Posts}} 
+      <table class="post_table">
+        <tr>
+          <th class="post_item">Title</th>
+          <th class="post_item">Created</th>
+          <th class="post_item">Category</th>
+          <th class="post_item">ID</th>
+        </tr>
+        {{range .Posts}}
+          <tr class="post_back">
+            <td><div class="posts_item"><a href='/post/view/{{.ID}}'>{{.Title}}</a></div></td>
+            <td><div class="posts_item">{{humanDate .Created}}</div></td>
+            <td><div class="posts_item">{{.Category}}</div></td>
+            <td><div class="posts_item">#{{.ID}}</div></td>
+          </tr>
+        {{end}}
+      </table>
+      {{else}}
+        <p>
+          {{if not .Category}}
+            There are no posts here yet.
+          {{end}}
+        </p>
+      {{end}}
+  </div>
+</div>
+{{end}}

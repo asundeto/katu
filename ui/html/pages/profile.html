@@ -1,0 +1,28 @@
+{{define "title"}}Profile{{end}}
+{{define "main"}}
+    <div class="profile-box">
+        <div class="profile-user-in">
+            <div class="profile-title">
+                <h1>Profile</h1>
+            </div>
+            <h2>User name: {{ .Form.Name}}</h2>
+            <h2 class="profile-email">User email: {{ .Form.Email}}</h2>
+            <div class="profile-photo-back">
+                <img class="profile-photo" src="/static/profile_photo/{{ .Form.ProfilePhoto}}" alt="">
+            </div>
+            <div class="change-profile-photo">
+                <form action="/user/profile" method="POST" enctype="multipart/form-data">
+                    <div id="drop-area">
+                        <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
+                        <p>Drag and drop an image here or click to select</p>
+                        <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
+                      </div>
+                      <div class="post-image-message"></div>
+                      <button type="submit">Change</button>
+                </form>
+            </div>
+            <a class="btnLogin" href="/user/logout">Logout</a>
+        </div>
+    </div>
+
+{{end}}
