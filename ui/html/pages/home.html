@@ -5,11 +5,11 @@
   <div>
     <div class="category-slider">
         <div class="filter_new_back">
-          <a id="filter_new" class="filter_new" href="/post/category/game">Game</a>
-          <a class="filter_new" href="/post/category/films">Films</a>
-          <a class="filter_new" href="/post/category/programming">Programming</a>
-          <a class="filter_new" href="/post/category/anime">Anime</a>
-          <a class="filter_new" href="/post/category/sport">Sport</a>
+          <a id="filter_new" class="filter_new" href="/post/category/game">Ойындар</a>
+          <a class="filter_new" href="/post/category/films">Фильмдер</a>
+          <a class="filter_new" href="/post/category/programming">Бағдарламалау</a>
+          <a class="filter_new" href="/post/category/anime">Аниме</a>
+          <a class="filter_new" href="/post/category/sport">Спорт</a>
         </div>
     </div>
   </div>
@@ -17,9 +17,9 @@
     {{if .Posts}} 
       <table class="post_table">
         <tr>
-          <th class="post_item">Title</th>
-          <th class="post_item">Created</th>
-          <th class="post_item">Category</th>
+          <th class="post_item">Тақырып</th>
+          <th class="post_item">Жасалды</th>
+          <th class="post_item">Категория</th>
           <th class="post_item">ID</th>
         </tr>
         {{range .Posts}}
@@ -34,7 +34,7 @@
       {{else}}
         <p>
           {{if not .Category}}
-            There are no posts here yet.
+            Бұл жерде әлі пост жоқ!
           {{end}}
         </p>
       {{end}}

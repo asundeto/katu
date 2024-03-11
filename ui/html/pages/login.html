@@ -3,7 +3,7 @@
 <div class="login_back">
   <div class="wrapper active-pop">
     <div class="form-box login">
-      <h2>Login</h2>
+      <h2>Кіру</h2>
       <form action="/user/login" method="POST">
         <div class="input-box">
           <span class="icon">
@@ -18,7 +18,7 @@
             <ion-icon class="log-icon-lock1 log-icon-lock" name="lock-closed"></ion-icon>
           </span>
           <input class="log-pass" id="password-label-log" type="password" name="password" maxlength="25" required>
-          <label>Password</label>
+          <label>Құпия сөз</label>
         </div>
 
         
@@ -33,17 +33,17 @@
 
         <div class="remember-forgot">
           <label><input type="checkbox">
-            Remember me</label>
-          <a href="#">Forgot password?</a>
+            Мені сақтау</label>
+          <a href="#">Құпия сөзіңізді ұмыттыңызба?</a>
         </div>
 
         <a href="/auth/google/login">Google</a>
         <a href="/auth/github/login">GitHUB</a>
 
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">Кіру</button>
         <div class="login-register">
-          <p>Don't have an account?<a href="#" class="register-link"> Register</a></p>
+          <p>Аккаунтыңыз жоқпа?<a href="#" class="register-link"> Тіркелу</a></p>
         </div>
 
 
@@ -52,14 +52,14 @@
 
 
     <div class="form-box register">
-      <h2>Registration</h2>
+      <h2>Тіркелу</h2>
       <form action="/user/register" method="POST">
         <div class="input-box">
           <span class="icon">
             <ion-icon name="person"></ion-icon>
           </span>
           <input id="reg-username" class="reg-username" type="text" name="username" maxlength="20" required>
-          <label>Username</label>
+          <label>Қолданушы аты</label>
         </div>
 
 
@@ -77,7 +77,7 @@
             <ion-icon class="log-icon-lock2 log-icon-lock" name="lock-closed"></ion-icon>
           </span>
           <input class="reg-password" id="password-label-reg" type="password" name="password" required>
-          <label>Password</label>
+          <label>Құпия сөз</label>
         </div>
 
 
@@ -86,7 +86,7 @@
             <ion-icon class="log-icon-lock3 log-icon-lock" name="lock-closed"></ion-icon>
           </span>
           <input class="reg-password-second" id="password-label-reg2" type="password" name="password-repeat" required>
-          <label>Repeat password</label>
+          <label>Құпия сөз қайталау</label>
         </div>
 
 
@@ -99,7 +99,7 @@
 
         <div class="remember-forgot">
           <label><input name="checkbox" type="checkbox">
-            I agree to the terms & conditions </label>
+            Мен шарттармен келісемін </label>
         </div>
         
         <div class="input-box inperr" id="error-window-box2"> <!--ERROR ---- MSG -->
@@ -109,9 +109,9 @@
           <label id="error-window-log2"></label>
         </div>
 
-        <button type="submit" id="btn-reg" class="btn">Register</button>
+        <button type="submit" id="btn-reg" class="btn">Тіркелу</button>
         <div class="login-register">
-          <p>Already have an account? <a href="#" class="login-link"> Login</a></p>
+          <p>Аккаунтыңыз барма? <a href="#" class="login-link"> Кіру</a></p>
         </div>
 
       </form>

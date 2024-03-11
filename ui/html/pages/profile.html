@@ -3,10 +3,10 @@
     <div class="profile-box">
         <div class="profile-user-in">
             <div class="profile-title">
-                <h1>Profile</h1>
+                <h1>Жеке парақша</h1>
             </div>
-            <h2>User name: {{ .Form.Name}}</h2>
-            <h2 class="profile-email">User email: {{ .Form.Email}}</h2>
+            <h2>Қолданушы аты: {{ .Form.Name}}</h2>
+            <h2 class="profile-email">email: {{ .Form.Email}}</h2>
             <div class="profile-photo-back">
                 <img class="profile-photo" src="/static/profile_photo/{{ .Form.ProfilePhoto}}" alt="">
             </div>
@@ -14,7 +14,7 @@
                 <form action="/user/profile" method="POST" enctype="multipart/form-data">
                     <div id="drop-area">
                         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
-                        <p>Drag and drop an image here or click to select</p>
+                        <p>Суретті осы жерге сүйреп апарыңыз немесе таңдау үшін басыңыз</p>
                         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
                       </div>
                       <div class="post-image-message"></div>

@@ -1,16 +1,16 @@
 {{ define "nav"}}
 <header class="header">
-    <a href="/"><h2 class="logo">Forum</h2></a>
+    <a href="/"><h2 class="logo">KATU</h2></a>
     <nav class="navigation">
-      <a class="nav-menu" href="/">Home</a>
-      <a class="nav-menu" href="/post/create">Create a Post</a>
-      <a class="nav-menu" href="/?category=created">My Posts</a>
-      <a class="nav-menu" href="/?category=liked">Liked Posts</a>
+      <a class="nav-menu" href="/">Басты бет</a>
+      <a class="nav-menu" href="/post/create">Жаңа пост</a>
+      <a class="nav-menu" href="/?category=created">Менің посттарым</a>
+      <a class="nav-menu" href="/?category=liked">Ұннаған посттар</a>
       {{if .IsAuthenticated}}
       <a class="btnLogin" href="/user/profile">{{ .UserName}}</a>
-      <a class="btnLogin" href="/user/logout">Logout</a>
+      <a class="btnLogin" href="/user/logout">Шығу</a>
       {{else}}
-      <a class="btnLogin" href="/user/login">Login</a>
+      <a class="btnLogin" href="/user/login">Кіру</a>
       {{end}}
     </nav>
     <span class="icon-menu">
