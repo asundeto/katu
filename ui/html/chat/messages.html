@@ -1,0 +1,69 @@
+{{define "title"}}Messages{{end}}
+{{define "main"}}
+    <div class="messages-box-back">
+        <div class="messages-box">
+            <h2>Messages</h2>
+            {{if .Form.StartedChats}}
+            <div class="users-back">
+                {{range .Form.StartedChats}}
+                    <a href='/chat/{{ .With}}'>
+                        <div class="user-row">
+                            <div class="user-row-left">
+                                <img class="user-messages-photo" src="/static/profile_photo/{{ .WithPhoto}}" alt="">
+                                {{if .WithStatus}}
+                                    <div class="user-online-status"></div>
+                                {{end}}
+                                <div class="users-name-chats">
+                                    <div class="chat-with">
+                                        {{ .With}}
+                                    </div> 
+                                    <div class="chat-last-message">
+                                        {{ .LastMessage}}
+                                    </div>
+                                </div>
+                                <div class="users-name-chats-end">
+                                    <div class="last-message-time">
+                                        {{ .LastMessageTime}}
+                                    </div>
+                                    {{if ne .UnseenMessagesCount 0}}
+                                        <div class="unseen-messages-count">
+                                            {{.UnseenMessagesCount}}
+                                        </div>
+                                    {{end}}
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </a>
+                {{end}}
+            </div>
+            {{else}}
+            No started chats
+            {{end}}
+        </div>
+        <div class="messages-box">
+            <h2>Users</h2>
+            {{if .Form.Users}}
+            <div class="users-back">
+                {{range .Form.Users}}
+                    <a href='/user/profile/{{ .Name}}'>
+                        <div class="user-row">
+                            <div class="user-row-left">
+                                <img class="user-messages-photo" src="/static/profile_photo/{{ .ProfilePhoto}}" alt="">
+                                {{if .Online}}
+                                <div class="user-online-status"></div>
+                                {{end}}
+                                <div class="users-name">
+                                    {{ .Name}}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {{end}}
+            </div>
+            {{else}}
+            No users found
+            {{end}}
+        </div>
+    </div>
+{{end}}

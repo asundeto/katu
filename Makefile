@@ -2,7 +2,7 @@ build:
 	docker build -t forum:1.0 .
 
 run:
-	docker run -d --name forum-app -p8080:8080 forum:1.0 && echo "\nServer started at http://localhost:8080/"
+	docker run -d --name forum-app -p8080:8080 forum:1.0 && echo " \nServer started at https://localhost:8080/ "
 
 stop:
 	docker stop forum-app

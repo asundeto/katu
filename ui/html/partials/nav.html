@@ -1,18 +1,68 @@
 {{ define "nav"}}
 <header class="header">
-    <a href="/"><h2 class="logo">KATU</h2></a>
+  <div class="header-start">
+    <a href="/"><h2 class="logo">Forum</h2></a>
+  </div>
+  <div class="header-center">
     <nav class="navigation">
-      <a class="nav-menu" href="/">Басты бет</a>
-      <a class="nav-menu" href="/post/create">Жаңа пост</a>
-      <a class="nav-menu" href="/?category=created">Менің посттарым</a>
-      <a class="nav-menu" href="/?category=liked">Ұннаған посттар</a>
-      {{if .IsAuthenticated}}
-      <a class="btnLogin" href="/user/profile">{{ .UserName}}</a>
-      <a class="btnLogin" href="/user/logout">Шығу</a>
-      {{else}}
-      <a class="btnLogin" href="/user/login">Кіру</a>
-      {{end}}
+      <div class="header-item">
+        <a class="nav-menu" href="/">Home</a>
+      </div>
+      <div class="header-item">
+        <a class="nav-menu" href="/post/create">Create a Post</a>
+      </div>
+      <div class="header-item">
+        <a class="nav-menu" href="/?category=created">My Posts</a>
+      </div>
+      <div class="header-item">
+        <a class="nav-menu" href="/?category=liked">Liked Posts</a>
+      </div>
+      <div class="header-item">
+        {{if .Notifications}}
+          {{if .Notifications.MessageCount}}
+            <a class="nav-menu" href="/messages">Messages</a>
+            <div class="action-count-item">
+              {{ .Notifications.MessageCount}}
+            </div>
+          {{else}}
+            <a class="nav-menu" href="/messages">Messages</a>
+          {{end}}
+        {{else}}
+          <a class="nav-menu" href="/messages">Messages</a>
+        {{end}}
+      </div>
+      <div class="header-item">
+        {{if .Notifications}}
+          {{if .Notifications.ActionCount}}
+            <a class="nav-menu" href="/activity">Activity</a>
+            <div class="action-count-item">
+              {{ .Notifications.ActionCount}}
+            </div>
+          {{else}}
+            <a class="nav-menu" href="/activity">Activity</a>
+          {{end}}
+        {{else}}
+          <a class="nav-menu" href="/activity">Activity</a>
+        {{end}}
+      </div>
+      <div class="header-buttons-mobile">
+        {{if .IsAuthenticated}}
+          <a class="btnLogin profile" href="/user/profile/{{ .UserName}}">{{ .UserName}}</a>
+          <a class="btnLogin" href="/user/logout">Logout</a>
+          {{else}}
+          <a class="btnLogin" href="/user/login">Login</a>
+          {{end}}
+      </div>
     </nav>
+  </div>
+  <div class="header-buttons">
+    {{if .IsAuthenticated}}
+      <a class="btnLogin profile" href="/user/profile/{{ .UserName}}">{{ .UserName}}</a>
+      <a class="btnLogin" href="/user/logout">Logout</a>
+      {{else}}
+      <a class="btnLogin" href="/user/login">Login</a>
+      {{end}}
+  </div>
     <span class="icon-menu">
       <img class="menu-img" src="/static/img/menu.png" alt="">
     </span>

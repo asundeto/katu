@@ -43,7 +43,7 @@ func CreatePosts(db *sql.DB) error {
 }
 
 func CreateTables(b *sql.DB) error {
-	var stmts []string = []string{Users, Comment, Session, PostReaction, CommentReaction}
+	var stmts []string = []string{Users, Comment, Session, PostReaction, CommentReaction, Chats, Activity}
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	for _, i := range stmts {
 
@@ -63,7 +63,8 @@ const (
 		email TEXT NOT NULL,
 		hashed_password CHAR(60) NOT NULL,
 		profile_photo TEXT NOT NULL,
-		created DATETIME NOT NULL
+		created DATETIME NOT NULL,
+		online INTEGER
 	);`
 
 	Comment = `CREATE TABLE IF NOT EXISTS comments (
@@ -91,5 +92,22 @@ const (
 		comment_id INTEGER,
 		like INTEGER,
 		dislike INTEGER
+	);`
+	Chats = `CREATE TABLE IF NOT EXISTS Chats (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		first_person_name TEXT,
+		second_person_name TEXT,
+		history CHAR(60)
+	);`
+	//types createpost, createcomment, reactionpost, reactioncomment
+	Activity = `CREATE TABLE IF NOT EXISTS Activity (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		username TEXT,
+		author TEXT,
+		type TEXT,
+		post CHAR(60),
+		comment CHAR(60),
+		seen INTEGER,
+		date string
 	);`
 )

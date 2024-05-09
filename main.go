@@ -8,24 +8,21 @@ import (
 	"time"
 	"yinyang/internal/dbs"
 	"yinyang/internal/handlers"
-	"yinyang/internal/template"
 	"yinyang/internal/models"
+	"yinyang/internal/template"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	addr := flag.String("addr", ":8080", "HTTPS network address") // Change the port to 443 for HTTPS
+	addr := flag.String("addr", ":8080", "HTTP network address")
 	flag.Parse()
-
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-
 	db, err := dbs.OpenDB()
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-
 	dbs.CreatePosts(db)
 	dbs.CreateTables(db)
 	defer db.Close()
@@ -33,7 +30,6 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-
 	app := &handlers.Application{
 		ErrorLog:      errorLog,
 		InfoLog:       infoLog,
@@ -42,7 +38,6 @@ func main() {
 		Users:         &models.UserModel{DB: db},
 		Reactions:     &models.ReactionModel{DB: db},
 	}
-
 	srv := &http.Server{
 		Addr:         *addr,
 		ErrorLog:     errorLog,
@@ -51,8 +46,10 @@ func main() {
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
-
-	infoLog.Printf("Starting server on https://localhost%s", *addr)
-	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
+	infoLog.Printf("Starting server on http://localhost%s", *addr)
+	err = srv.ListenAndServe()
 	errorLog.Fatal(err)
+	// infoLog.Printf("Starting server on https://localhost%s", *addr)
+	// err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
+	// errorLog.Fatal(err)
 }

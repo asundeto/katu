@@ -5,36 +5,39 @@
   <div>
     <div class="category-slider">
         <div class="filter_new_back">
-          <a id="filter_new" class="filter_new" href="/post/category/game">Ойындар</a>
-          <a class="filter_new" href="/post/category/films">Фильмдер</a>
-          <a class="filter_new" href="/post/category/programming">Бағдарламалау</a>
-          <a class="filter_new" href="/post/category/anime">Аниме</a>
-          <a class="filter_new" href="/post/category/sport">Спорт</a>
+          <a id="filter_new" class="filter_new" onclick="sortCategory('game')">Game</a>
+          <a class="filter_new" onclick="sortCategory('films')">Films</a>
+          <a class="filter_new" onclick="sortCategory('programming')">Programming</a>
+          <a class="filter_new" onclick="sortCategory('anime')">Anime</a>
+          <a class="filter_new" onclick="sortCategory('sport')">Sport</a>
         </div>
     </div>
   </div>
-  <div class="post_table">
+  <div class="post_table" id="post-table">
     {{if .Posts}} 
-      <table class="post_table">
-        <tr>
-          <th class="post_item">Тақырып</th>
-          <th class="post_item">Жасалды</th>
-          <th class="post_item">Категория</th>
-          <th class="post_item">ID</th>
-        </tr>
         {{range .Posts}}
-          <tr class="post_back">
-            <td><div class="posts_item"><a href='/post/view/{{.ID}}'>{{.Title}}</a></div></td>
-            <td><div class="posts_item">{{humanDate .Created}}</div></td>
-            <td><div class="posts_item">{{.Category}}</div></td>
-            <td><div class="posts_item">#{{.ID}}</div></td>
-          </tr>
+        <a class="checkhref" href='/post/view/{{.ID}}'>
+          <div class="posts-back">
+            <div class="post-main-box">
+              {{if .Image}}
+                <img class="post-image-main-screen" src="/static/uploads/{{ .Image}}" alt="">
+              {{end}}
+              <div class="post-info-box">
+                <div class="post_item_title">Title: {{.Title}}</div>
+                <div class="post_item_title">Author: {{.UserName}}</div>
+              </div>
+            </div>
+            <div class="post-bottom">
+              <div class="posts_item_category">{{.Category}}</div>
+              <div class="post_item-date">{{humanDate .Created}}</div>
+            </div>
+          </div>
+        </a>
         {{end}}
-      </table>
-      {{else}}
+    {{else}}
         <p>
           {{if not .Category}}
-            Бұл жерде әлі пост жоқ!
+            There are no posts here yet.
           {{end}}
         </p>
       {{end}}

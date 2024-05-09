@@ -1,4 +1,4 @@
-# Forum
+# Forum 
 
 Welcome to the Web Forum project! This is a web application that allows users to communicate with each other through posts and comments. It also includes features such as category association, post liking and disliking, and post filtering. The project is built using Golang and SQLite.
 
@@ -51,3 +51,8 @@ Enjoy communicating and exchanging ideas with other users through the Web Forum!
 
 ## Authors
 ### asundeto & atemerzh
+
+## header color - #010409
+## border color - #30363d
+## body color - #0d1117
+## boxes color - #0d1117

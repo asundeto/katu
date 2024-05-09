@@ -3,26 +3,49 @@
     <div class="profile-box">
         <div class="profile-user-in">
             <div class="profile-title">
-                <h1>Жеке парақша</h1>
+                <h1>Profile</h1>
             </div>
-            <h2>Қолданушы аты: {{ .Form.Name}}</h2>
-            <h2 class="profile-email">email: {{ .Form.Email}}</h2>
-            <div class="profile-photo-back">
-                <img class="profile-photo" src="/static/profile_photo/{{ .Form.ProfilePhoto}}" alt="">
+            <div class="profile_main_info">
+                <div class="profile-photo-back">
+                    <img class="profile-photo" src="/static/profile_photo/{{ .Form.ProfilePhoto}}" alt="">
+                </div>
+                <div class="profile-info">
+                    <div class="profile_info_text">
+                        <h3>User name: {{ .Form.Name}}</h3>
+                        <h3 class="profile-email">User email: {{ .Form.Email}}</h3>
+                    </div>
+                    {{if not .Form.Access}}
+                    <div class="profile-info-message-btn-back">
+                        <a class="simple-btn" href="/chat/{{ .Form.Name}}">Message</a>
+                    </div>
+                    {{end}}
+                </div>
             </div>
-            <div class="change-profile-photo">
-                <form action="/user/profile" method="POST" enctype="multipart/form-data">
-                    <div id="drop-area">
+            <div class="profile_photo_btn">
+                <h4>{{.Form.Error}}</h4>
+            </div>
+            {{if .Form.Access}}
+                <div class="profile_photo_btn">
+                    <a class="simple-btn" id="change_btn" onclick="openImageFieldProfile()">Change</a>
+                </div>
+            {{end}}
+            <div class="change-profile-photo" id="change-profile-photo">
+                <form id="myForm" enctype="multipart/form-data">
+                    <div id="drop-area" class="drop-area">
                         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
-                        <p>Суретті осы жерге сүйреп апарыңыз немесе таңдау үшін басыңыз</p>
+                        <label class="image-file-upload-text" for="fileInput">Drag and drop or click</label> 
                         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
-                      </div>
+                    </div>
                       <div class="post-image-message"></div>
-                      <button type="submit">Change</button>
+                      <div class="btn_box">
+                        <a class="simple-btn" id="change_btn_cancel" onclick="closeImageFieldProfile()">Cancel</a>
+                        <div class="simple-btn" onclick="changeProfilePhotoFunc('/user/profile/{{ .Form.Name}}')">Change</div>
+                    </div>
                 </form>
             </div>
-            <a class="btnLogin" href="/user/logout">Logout</a>
+            {{if .Form.Access}}
+            <a class="profile-logout-btn" href="/user/logout">Logout</a>
+            {{end}}
         </div>
     </div>
-
 {{end}}

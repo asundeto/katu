@@ -1,27 +1,10 @@
-package handlers
+package template
 
 import (
 	"path/filepath"
 	"text/template"
 	"time"
-
-	"yinyang/internal/models"
 )
-
-type TemplateData struct {
-	CurrentYear        int
-	Post               *models.Post
-	Posts              []*models.Post
-	Form               any
-	IsAuthenticated    bool
-	Category           string
-	Categories         []string
-	Comments           []models.Comment
-	ErrorStruct        *ErrorStruct
-	CommentError       bool
-	UserName           string
-	PostCategoriesForm []PostCategoriesForm
-}
 
 func HumanDate(t time.Time) string {
 	return t.Format("02 Jan 2006 at 15:04")
@@ -37,6 +20,11 @@ func NewTemplateCache() (map[string]*template.Template, error) {
 	if err != nil {
 		return nil, err
 	}
+	chat, err := filepath.Glob("./ui/html/chat/*.html")
+	if err != nil {
+		return nil, err
+	}
+	pages = append(pages, chat...)
 	for _, page := range pages {
 		name := filepath.Base(page)
 
@@ -49,6 +37,7 @@ func NewTemplateCache() (map[string]*template.Template, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		ts, err = ts.ParseGlob(page)
 		if err != nil {
 			return nil, err

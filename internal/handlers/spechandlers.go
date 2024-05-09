@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
+	errorhandler "yinyang/internal/errors"
 	"yinyang/internal/models"
 )
 
@@ -18,12 +20,13 @@ func (app *Application) CheckSession(w http.ResponseWriter, r *http.Request) (*m
 	}
 	session, err := app.Posts.GetSessionFromToken(token.Value)
 	if err != nil {
-		if errors.Is(err, models.ErrNoRecord) {
+		if errors.Is(err, errorhandler.ErrNoRecord) {
 			http.SetCookie(w, &http.Cookie{
 				Name:    "session_token",
 				Value:   "",
 				Expires: time.Now().Add(-1 * time.Minute),
 			})
+			fmt.Println()
 			return nil, nil
 		} else {
 			return nil, err

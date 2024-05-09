@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -17,26 +16,7 @@ func SecureHeaders(next http.Handler) http.Handler {
 	})
 }
 
-func (app *Application) LogRequest(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		app.InfoLog.Printf("%s - %s %s %s", r.RemoteAddr, r.Proto, r.Method, r.URL.RequestURI())
-		next.ServeHTTP(w, r)
-	})
-}
-
-func (app *Application) RecoverPanic(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if err := recover(); err != nil {
-				w.Header().Set("Connection", "close")
-				app.ServerError(w, fmt.Errorf("%s", err), r)
-			}
-		}()
-		next.ServeHTTP(w, r)
-	})
-}
-
-func (app *Application) RequireAuthentication(next http.Handler) http.Handler {
+func (app *Application) RequireAuthentication(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := app.DeleteExpiredSessions()
 		if err != nil {
@@ -51,3 +31,22 @@ func (app *Application) RequireAuthentication(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+// func (app *Application) LogRequest(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		app.InfoLog.Printf("%s - %s %s %s", r.RemoteAddr, r.Proto, r.Method, r.URL.RequestURI())
+// 		next.ServeHTTP(w, r)
+// 	})
+// }
+
+// func (app *Application) RecoverPanic(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		defer func() {
+// 			if err := recover(); err != nil {
+// 				w.Header().Set("Connection", "close")
+// 				app.ServerError(w, fmt.Errorf("%s", err), r)
+// 			}
+// 		}()
+// 		next.ServeHTTP(w, r)
+// 	})
+// }

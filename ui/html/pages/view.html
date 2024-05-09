@@ -14,22 +14,28 @@
             <p>{{.Content}}</p>
             {{if .Image}}
             <div class="view_image_back">
-                <img class="post-img" src="/static/uploads/{{ .Image}}" alt="{{.Image}}">
+                <div class="view_image_inner_back">
+                    <img class="post-img" src="/static/uploads/{{ .Image}}" alt="{{.Image}}">
+                </div>
             </div>
             {{end}}
-            <div class='post-box'>
+            <div class='post-box-reaction-back'>
                 {{if .IsAuthenticated}}
-                    <a class="reaction like" href="/likePost?id={{.ID}}"><img src="/static/img/like.png" alt="Like" ></a>
-                    <strong>{{.Likes}}</strong>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
-                    <a class="reaction dislike" href="/dislikePost?id={{.ID}}"><img src="/static/img/dislike.png" alt="Dislike"></a>
-                    <strong>{{.Dislikes}}</strong>
+                    <div class="reaction-back">
+                        <div class="reaction like"><img src="/static/img/like.png" alt="Like" onclick="reactionPost('/likePost?id={{.ID}}')" ></div>
+                        <strong>{{.Likes}}</strong>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                        <div class="reaction dislike"><img src="/static/img/dislike.png" alt="Dislike" onclick="reactionPost('/dislikePost?id={{.ID}}')"></div>
+                        <strong>{{.Dislikes}}</strong>
+                    </div>
                 {{else}}
-                    <img src="/static/img/like.png" alt="Like">
-                    <strong>{{.Likes}}</strong>
-                    <span>&nbsp;&nbsp;&nbsp;</span>
-                    <img src="/static/img/dislike.png" alt="Dislike">
-                    <strong>{{.Dislikes}}</strong>
+                    <div class="reaction-back">
+                        <img src="/static/img/like.png" alt="Like">
+                        <strong>{{.Likes}}</strong>
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                        <img src="/static/img/dislike.png" alt="Dislike">
+                        <strong>{{.Dislikes}}</strong>
+                    </div>
                 {{end}}
                 <br>
                 <div class="post-time-box">
@@ -47,60 +53,62 @@
             {{end}}
         </ul>
     </div>
-
-    {{if .Comments}}
-        <div class="comments">
-            <h3>Комментарилар:</h3>
-                {{range .Comments}}
-                    <div class="comment-box">
-                        <div class="comment">
-                            <div class="comment-header">
-                                <div class="comment-author">
-                                    <img class="user-profile-photo" src="/static/profile_photo/{{ .AuthorProfilePhoto}}" alt="">
-                                    <strong class="comment-author-name">{{.Author}}</strong>
+    <div class="comments">
+        {{if .Comments}}
+                <h3>Comments:</h3>
+                    {{range .Comments}}
+                        <div class="comment-box">
+                            <div class="comment">
+                                <div class="comment-header">
+                                    <div class="comment-author">
+                                        <img class="user-profile-photo" src="/static/profile_photo/{{ .AuthorProfilePhoto}}" alt="">
+                                        <strong class="comment-author-name">{{.Author}}</strong>
+                                    </div>
+                                </div>
+                                <div class="comment-body">
+                                    <p>{{.CContent}}</p>
+                                </div>
+                                <div class="comment-reactions">
+                                    {{if .IsAuthenticated}}
+                                        <div class="reaction-back">
+                                            <div class="reaction comment-like" href="/likeComment?id={{.Id}}"><img src="/static/img/like.png" alt="Like" onclick="reactionComment('/likeComment?id={{.Id}}')"></div>
+                                            <strong>{{.Likes}}</strong>
+                                            <span>&nbsp;</span>
+                                            <div class="reaction comment-dislike" href="/dislikeComment?id={{.Id}}"><img src="/static/img/dislike.png" alt="Dislike" onclick="reactionComment('/dislikeComment?id={{.Id}}')"></div>
+                                            <strong>{{.Dislikes}}</strong>
+                                        </div>
+                                    {{else}}
+                                        <div class="reaction-back">
+                                            <img src="/static/img/like.png" alt="Like">
+                                            <strong>{{.Likes}}</strong>
+                                            <span>&nbsp;</span>
+                                            <img src="/static/img/dislike.png" alt="Dislike">
+                                            <strong>{{.Dislikes}}</strong>
+                                        </div>
+                                    {{end}}
                                 </div>
                             </div>
-                            <div class="comment-body">
-                                <p>{{.CContent}}</p>
-                            </div>
-                            <div class="comment-reactions">
-                                {{if .IsAuthenticated}}
-                                    <a class="reaction comment-like" href="/likeComment?id={{.Id}}"><img src="/static/img/like.png" alt="Like"></a>
-                                    <strong>{{.Likes}}</strong>
-                                    <span>&nbsp;</span>
-                                    <a class="reaction comment-dislike" href="/dislikeComment?id={{.Id}}"><img src="/static/img/dislike.png" alt="Dislike"></a>
-                                    <strong>{{.Dislikes}}</strong>
-                                {{else}}
-                                    <img src="/static/img/like.png" alt="Like">
-                                    <strong>{{.Likes}}</strong>
-                                    <span>&nbsp;</span>
-                                    <img src="/static/img/dislike.png" alt="Dislike">
-                                    <strong>{{.Dislikes}}</strong>
-                                {{end}}
-                            </div>
                         </div>
-                    </div>
-                {{end}}
-        </div>
-    {{end}}
-
-
+                        <hr>
+                    {{end}}
+            
+        {{end}}
+    </div>  
 
     {{if .IsAuthenticated}}
-    <form method="POST" action="/post/view/{{.Post.ID}}">
         <div class="form-group">
             <label for="comment-{{.Post.ID}}">Add a Comment:</label>
-            <textarea class="form-control no-resize" id="comment-{{.Post.ID}}" name="comment" rows="3"></textarea>
-            {{if .CommentError}}
+            <textarea class="form-control no-resize comment-content" id="comment-{{.Post.ID}}" name="comment" rows="3"></textarea>
+            {{if .Form}}
             <div class="error-message">
-                <p>Дұрыс пікір жазуыңызды сұраймыз!</p>
+                <p>{{ .Form}}</p>
             </div>
             {{end}}
         </div>
-        <button type="submit" class="btn btn-primary cs-button">Басу</button>
-    </form>
+        <div class="btn btn-primary cs-button" onclick="createCommentFunc('/post/view/{{.Post.ID}}')">Submit</div>
+
     {{else}}
-    <p>Пост жасау немесе коммент басу үшін <a class="login-link" href="/user/login">Кіру</a> батырмасын басыңыз</p>
+    <p>Please <a class="login-link" href="/user/login">login</a> to post a comment or react to posts/comments.</p>
     {{end}}
     {{end}}
     </div>

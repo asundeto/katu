@@ -7,79 +7,56 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	errorhandler "yinyang/internal/errors"
+	"yinyang/internal/models"
 )
 
-type GitHubResponseToken struct {
-	AccessToken string `json:"access_token"`
-	TokenID     string `json:"id_token"`
-	Scope       string `json:"scope"`
-}
-
-type GitHubLoginUserData struct {
-	ID         int
-	Name       string
-	Email      string
-	Password   string
-	FirstName  string
-	SecondName string
-	Login      string
-	Provider   string
-}
-
-const (
-	GitHubAuthURL      = "https://github.com/login/oauth/authorize"
-	GitHubClientID     = "7204d1f96b4db7e5d453"
-	GitHubRedirectURL  = "https://localhost:8080/auth/github/callback"
-	GitHubClientSecret = "2a4621170475143853a9752bf405fb1d2f781051"
-)
-
-func (app *Application) GitHUBAuthorization(data *GitHubLoginUserData) (*Session, error) {
+func (app *Application) GitHUBAuthorization(data *models.GitHubLoginUserData) (*Session, error) {
 	session := &Session{}
 	return session, nil
 }
 
 func (app *Application) GithubAuthHandler(w http.ResponseWriter, r *http.Request) {
 	// prompt=consent    ---- this is needed for prompting the user to confirm authorisation
-	url := fmt.Sprintf("%s?client_id=%s&redirect_uri=%s&scope=offline&prompt=consent", GitHubAuthURL, GitHubClientID, GitHubRedirectURL)
+	url := fmt.Sprintf("%s?client_id=%s&redirect_uri=%s&scope=offline&prompt=consent", models.GitHubAuthURL, models.GitHubClientID, models.GitHubRedirectURL)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
 func (app *Application) GithubCallback(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code") // temporary token given by Github
 	if code == "" {
-		// helpers.ErrorHandler(w, http.StatusUnauthorized, errors.New("Temporary token is invalid"))
-		app.ServerError(w, errors.New("Temporary token is invalid"), r)
+		app.ServerError(w, errorhandler.ErrZeroCode, r)
 	}
 
 	tokenRes, err := getGithubOauthToken(code)
 	if err != nil {
-		// helpers.ErrorHandler(w, http.StatusBadGateway, errors.New("The information received from Github"))
-		app.ServerError(w, errors.New("The information received from Github"), r)
+		app.ServerError(w, errorhandler.ErrGitHUBInfo, r)
 		return
 	}
 
 	githubData, err := getGithubData(tokenRes.AccessToken)
 	if err != nil {
-		// helpers.ErrorHandler(w, http.StatusBadGateway, errors.New("The information received from GitHub"))
-		app.ServerError(w, errors.New("The information received from Github"), r)
+		app.ServerError(w, errorhandler.ErrGitHUBInfo, r)
 		return
 	}
 	fmt.Println("&&&", githubData)
 
 	userData, err := getUserData(githubData)
 	if err != nil {
-		app.ServerError(w, errors.New("The information received from Github"), r)
+		app.ServerError(w, errorhandler.ErrGitHUBInfo, r)
 		return
 	}
-	fmt.Println("-------------------", userData.Login)
-	loginCheck, id := app.loginCheckAuth(userData.Login, userData.Password)
-	if loginCheck == "Email non registered yet!" {
-		fmt.Println("First time Registration")
-		var profilePhoto = "default.jpg"
-		err = app.Users.Insert(userData.Login, userData.Login, userData.Password, profilePhoto)
-		if err != nil {
-			app.ServerError(w, errors.New("Server Error"), r)
-			return
+	id, err := app.LoginCheckAuth(userData.Email, userData.Password)
+	if err != nil {
+		if errors.Is(err, errorhandler.ErrInvalidCredentials) {
+			var profilePhoto = "default.jpg"
+			err = app.Users.Insert(userData.Name, userData.Email, userData.Password, profilePhoto)
+			if err != nil {
+				app.ServerError(w, errorhandler.ErrServerError, r)
+				return
+			}
+		} else {
+			app.ServerError(w, err, r)
 		}
 	}
 	_, _, err = app.Posts.CreateSession(id, userData.Login)
@@ -98,23 +75,24 @@ func (app *Application) GithubCallback(w http.ResponseWriter, r *http.Request) {
 		Expires: expiration,
 		Path:    "/",
 	}
+	app.Users.UserStatusOnline(userData.Name)
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func getUserData(data string) (GitHubLoginUserData, error) {
-	userData := GitHubLoginUserData{}
+func getUserData(data string) (models.GitHubLoginUserData, error) {
+	userData := models.GitHubLoginUserData{}
 	if err := json.Unmarshal([]byte(data), &userData); err != nil {
-		return GitHubLoginUserData{}, err
+		return models.GitHubLoginUserData{}, err
 	}
 
 	return userData, nil
 }
 
-func getGithubOauthToken(code string) (*GitHubResponseToken, error) {
+func getGithubOauthToken(code string) (*models.GitHubResponseToken, error) {
 	requestBodyMap := map[string]string{
-		"client_id":     GitHubClientID,
-		"client_secret": GitHubClientSecret,
+		"client_id":     models.GitHubClientID,
+		"client_secret": models.GitHubClientSecret,
 		"code":          code,
 	}
 	requestJSON, err := json.Marshal(requestBodyMap)
@@ -143,7 +121,7 @@ func getGithubOauthToken(code string) (*GitHubResponseToken, error) {
 		return nil, err
 	}
 
-	var ghresp GitHubResponseToken
+	var ghresp models.GitHubResponseToken
 	if err := json.Unmarshal(respbody, &ghresp); err != nil {
 		return nil, err
 	}

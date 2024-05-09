@@ -6,13 +6,15 @@ import (
 	"net/http"
 	"runtime/debug"
 	"time"
+	"yinyang/internal/models"
+	"yinyang/internal/template"
 )
 
 func (app *Application) ServerError(w http.ResponseWriter, err error, r *http.Request) {
 	data := app.NewTemplateData(r)
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 	app.ErrorLog.Output(2, trace)
-	dataerr := &ErrorStruct{
+	dataerr := &models.ErrorStruct{
 		Status: http.StatusInternalServerError,
 	}
 	data.ErrorStruct = dataerr
@@ -28,7 +30,7 @@ func (app *Application) ClientError(w http.ResponseWriter, r *http.Request) {
 	app.ErrorHandler(w, http.StatusBadRequest, r)
 }
 
-func (app *Application) Render(w http.ResponseWriter, status int, page string, data *TemplateData, r *http.Request) {
+func (app *Application) Render(w http.ResponseWriter, status int, page string, data *template.TemplateData, r *http.Request) {
 	ts, ok := app.TemplateCache[page]
 	var err error
 	if !ok {
@@ -45,7 +47,7 @@ func (app *Application) Render(w http.ResponseWriter, status int, page string, d
 	buf.WriteTo(w)
 }
 
-func (app *Application) renderErr(w http.ResponseWriter, status int, name string, td *TemplateData, r *http.Request) error {
+func (app *Application) renderErr(w http.ResponseWriter, status int, name string, td *template.TemplateData, r *http.Request) error {
 	ts, ok := app.TemplateCache[name]
 	if !ok {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -61,8 +63,8 @@ func (app *Application) renderErr(w http.ResponseWriter, status int, name string
 	return err
 }
 
-func (app *Application) NewTemplateData(r *http.Request) *TemplateData {
-	return &TemplateData{
+func (app *Application) NewTemplateData(r *http.Request) *template.TemplateData {
+	return &template.TemplateData{
 		CurrentYear:     time.Now().Year(),
 		IsAuthenticated: app.isAuthenticated(r),
 	}

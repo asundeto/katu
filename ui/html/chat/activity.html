@@ -1,0 +1,39 @@
+{{define "title"}}Activity{{end}}
+{{define "main"}}
+    <div class="activity-box">
+        <h2>Activity</h2>
+        {{if .Form}}
+            <div class="users-back">
+                {{range .Form}}
+                    <a href="/post/view/{{ .Post.ID}}">
+                        {{if not .Seen}}
+                            <div class="activity-item act-item-notseen">
+                        {{else}}
+                            <div class="activity-item">
+                        {{end}}
+                                <div class="activity-item-type" id="change-type">{{ .Type}}</div>
+                                <div class="activity-item-main">
+                                    <div class="activity-item-start">
+                                        {{if .Post.Image}}
+                                            <img class="user-messages-photo" src="/static/uploads/{{ .Post.Image}}" alt="">
+                                        {{end}}
+                                        {{ .Post.Title}}
+                                    </div>
+                                    <div class="activity-item-end">
+                                        {{if eq .Username $.UserName}}
+                                            <a class="activity-remove-btn" href="/remove/activity/{{ .ID}}"><img class="user-messages-photo" src="/static/img/delete.png" alt=""></a>
+                                        {{end}}
+                                        <div class="activity-item-date">
+                                            {{ .Date}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </a>
+                {{end}}
+            </div>
+        {{else}}
+        <h4>No activity detected</h4>
+        {{end}}
+    </div>
+{{end}}

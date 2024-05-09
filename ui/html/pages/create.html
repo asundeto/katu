@@ -1,31 +1,49 @@
 {{define "title"}}Create{{end}}
 {{define "main"}}
 <div class="create">
-  <form action="/post/create" method="POST" enctype="multipart/form-data">
-    <h2>Жаңа пост</h2>
-    <textarea spellcheck="false" maxlength="77" placeholder="Тақырыбы" required name="title"></textarea>
-    <textarea class="myarea" spellcheck="false" maxlength="2000" placeholder="Мұнда бірдеңе теріңіз..." name="content"
+  <form action="/post/create/post" method="POST" enctype="multipart/form-data">
+    <h2>New Post</h2>
+    <textarea spellcheck="false" placeholder="Title" required name="title" id="post-title"></textarea>
+        {{if .Form}}
+        <h5>{{ .Form.Error.TitleError}}</h5>
+        {{end}}
+    <textarea class="myarea" spellcheck="false" placeholder="Type something here..." name="content" id="post-content"
       required></textarea>
+          {{if .Form}}
+          <h5>{{ .Form.Error.ContentError}}</h5>
+          {{end}}
       <!-- Drop and draw -->
-      <div id="drop-area">
+      <div class="drop-area" id="drop-area">
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
-        <p>Суретті осы жерге сүйреп апарыңыз немесе таңдау үшін басыңыз</p>
+        <label class="image-file-upload-text" for="fileInput">Drag and drop an image here or click to select</label> 
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
       </div>
+          {{if .Form}}
+          <h5>{{ .Form.Error.ImageError}}</h5>
+          {{end}}
       <div class="post-image-message"></div>
-
-    <div class="container">
+    
+      <div class="create-types-btn" id="create-types-btn">
+        Select type
+      </div>      
+    <div class="create-types-container" id="create-types-container">
       <ul class="ks-cboxtags">
-        <li><input type="checkbox" id="checkboxOne" name="Game" value="Game"><label for="checkboxOne">Ойындар</label></li>
-        <li><input type="checkbox" id="checkboxTwo" name="Films" value="Films"><label for="checkboxTwo">Фильмдер</label></li>
-        <li><input type="checkbox" id="checkboxThree" name="Programming" value="Programming"><label for="checkboxThree">Бағдарламалау</label></li>
-        <li><input type="checkbox" id="checkboxFour" name="Anime" value="Anime"><label for="checkboxFour">Аниме</label></li>
-        <li><input type="checkbox" id="checkboxFive" name="Sport" value="Sport"><label for="checkboxFive">Спорт</label></li>
+        <li><input type="checkbox" id="checkboxOne" name="Game" value="Game"><label for="checkboxOne">Game</label></li>
+        <li><input type="checkbox" id="checkboxTwo" name="Films" value="Films"><label for="checkboxTwo">Films</label></li>
+        <li><input type="checkbox" id="checkboxThree" name="Programming" value="Programming"><label for="checkboxThree">Programming</label></li>
+        <li><input type="checkbox" id="checkboxFour" name="Anime" value="Anime"><label for="checkboxFour">Anime</label></li>
+        <li><input type="checkbox" id="checkboxFive" name="Sport" value="Sport"><label for="checkboxFive">Sport</label></li>
       </ul>
     </div>
     <div class="center">
-      <button type="submit" class="create_btn">Жасау</button>
+      <button type="submit" class="create_btn">Create</button>
     </div>
   </form>
 </div>
+{{if .Form}}
+<div class="invisible_info">
+  <div id="ReturnedPostTitle">{{.Form.Title}}</div>
+  <div id="ReturnedPostContent">{{.Form.Content}}</div>
+</div>
+{{end}}
 {{end}}

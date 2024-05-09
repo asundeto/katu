@@ -1,0 +1,58 @@
+{{define "title"}}Chat{{end}}
+{{define "main"}}
+    <div class="messages-box">
+        <div class="chat-user-info">
+            <a href='/user/profile/{{ .Form.With}}'><img class="user-messages-photo" src="/static/profile_photo/{{ .Form.WithPhoto}}" alt=""></a>
+            {{if .Form.WithStatus}} 
+                <div class="user-chat-online-status"></div>
+            {{end}}
+            <h1 id="user-messages-username" class="user-messages-username">{{ .Form.With}}</h1>
+        </div>
+        <div class="messages-main">
+            <div class="messages-chat-window" id="messagesChatWindow">
+                {{if .Form}}
+                        {{range .Form.History}}
+                            {{if eq $.UserName .Author}}
+                                <div class="every-message-left">
+                                    <div class="own-message">
+                                        {{ .Message}}
+                                        <div class="message-time-left">
+                                            {{ .Time}}
+                                        </div>
+                                        <div class="check-mark-back">
+                                            {{if .Seen}}
+                                            <img class="check-mark" src="/static/img/checkmarkdouble.png" alt="">
+                                            {{else}}
+                                                <img class="check-mark-solo" src="/static/img/checkmarksolo.png" alt="">
+                                            {{end}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{else}}
+                                <div class="every-message-right">
+                                    <div class="own-message">
+                                        {{ .Message}}
+                                        <div class="message-time-left">
+                                            {{ .Time}}
+                                        </div>
+                                    </div>
+                                </div>
+                            {{end}}
+                        {{end}}
+                {{end}}
+            </div>
+        </div>
+            <div class="input-main-back">
+                <div class="input-back">
+                    <input id="chat-input" class="chat-input" type="text" name="message" placeholder="Send message" onkeydown="handleKeyDown(event)">
+                </div>
+                <div class="scroll-down-btn-back">
+                    <img id="scrollDownBtn" class="scroll-down-btn" src="/static/img/scrolldown.png">
+                </div>
+            
+                <div class="send-button-back">
+                    <img id="chat-submit" class="send-button" src="/static/img/send.png" alt="submit" onclick="sendMessage()">
+                </div>
+            </div>
+    </div>
+{{end}}
