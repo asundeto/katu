@@ -5,11 +5,11 @@
   <div>
     <div class="category-slider">
         <div class="filter_new_back">
-          <a id="filter_new" class="filter_new" onclick="sortCategory('game')">Game</a>
-          <a class="filter_new" onclick="sortCategory('films')">Films</a>
-          <a class="filter_new" onclick="sortCategory('programming')">Programming</a>
-          <a class="filter_new" onclick="sortCategory('anime')">Anime</a>
-          <a class="filter_new" onclick="sortCategory('sport')">Sport</a>
+          <a id="filter_new" class="filter_new" onclick="sortCategory('game')">Ойындар</a>
+          <a class="filter_new" onclick="sortCategory('films')">Фильмдер</a>
+          <a class="filter_new" onclick="sortCategory('programming')">Бағдарламалау</a>
+          <a class="filter_new" onclick="sortCategory('anime')">Аниме</a>
+          <a class="filter_new" onclick="sortCategory('sport')">Спорт</a>
         </div>
     </div>
   </div>
@@ -23,8 +23,8 @@
                 <img class="post-image-main-screen" src="/static/uploads/{{ .Image}}" alt="">
               {{end}}
               <div class="post-info-box">
-                <div class="post_item_title">Title: {{.Title}}</div>
-                <div class="post_item_title">Author: {{.UserName}}</div>
+                <div class="post_item_title">Тақырып: {{.Title}}</div>
+                <div class="post_item_title">Автор: {{.UserName}}</div>
               </div>
             </div>
             <div class="post-bottom">
@@ -37,7 +37,7 @@
     {{else}}
         <p>
           {{if not .Category}}
-            There are no posts here yet.
+            Бұл жерде әлі пост жоқ
           {{end}}
         </p>
       {{end}}

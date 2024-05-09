@@ -1,56 +1,56 @@
 {{ define "nav"}}
 <header class="header">
   <div class="header-start">
-    <a href="/"><h2 class="logo">Forum</h2></a>
+    <a href="/"><h2 class="logo">asundeto</h2></a>
   </div>
   <div class="header-center">
     <nav class="navigation">
       <div class="header-item">
-        <a class="nav-menu" href="/">Home</a>
+        <a class="nav-menu" href="/">Басты бет</a>
       </div>
       <div class="header-item">
-        <a class="nav-menu" href="/post/create">Create a Post</a>
+        <a class="nav-menu" href="/post/create">Пост құру</a>
       </div>
       <div class="header-item">
-        <a class="nav-menu" href="/?category=created">My Posts</a>
+        <a class="nav-menu" href="/?category=created">Менің посттарым</a>
       </div>
       <div class="header-item">
-        <a class="nav-menu" href="/?category=liked">Liked Posts</a>
+        <a class="nav-menu" href="/?category=liked">Ұнағандар</a>
       </div>
       <div class="header-item">
         {{if .Notifications}}
           {{if .Notifications.MessageCount}}
-            <a class="nav-menu" href="/messages">Messages</a>
+            <a class="nav-menu" href="/messages">Хабарлар</a>
             <div class="action-count-item">
               {{ .Notifications.MessageCount}}
             </div>
           {{else}}
-            <a class="nav-menu" href="/messages">Messages</a>
+            <a class="nav-menu" href="/messages">Хабарлар</a>
           {{end}}
         {{else}}
-          <a class="nav-menu" href="/messages">Messages</a>
+          <a class="nav-menu" href="/messages">Хабарлар</a>
         {{end}}
       </div>
       <div class="header-item">
         {{if .Notifications}}
           {{if .Notifications.ActionCount}}
-            <a class="nav-menu" href="/activity">Activity</a>
+            <a class="nav-menu" href="/activity">Белсенділік</a>
             <div class="action-count-item">
               {{ .Notifications.ActionCount}}
             </div>
           {{else}}
-            <a class="nav-menu" href="/activity">Activity</a>
+            <a class="nav-menu" href="/activity">Белсенділік</a>
           {{end}}
         {{else}}
-          <a class="nav-menu" href="/activity">Activity</a>
+          <a class="nav-menu" href="/activity">Белсенділік</a>
         {{end}}
       </div>
       <div class="header-buttons-mobile">
         {{if .IsAuthenticated}}
           <a class="btnLogin profile" href="/user/profile/{{ .UserName}}">{{ .UserName}}</a>
-          <a class="btnLogin" href="/user/logout">Logout</a>
+          <a class="btnLogin" href="/user/logout">Шығу</a>
           {{else}}
-          <a class="btnLogin" href="/user/login">Login</a>
+          <a class="btnLogin" href="/user/login">Кіру</a>
           {{end}}
       </div>
     </nav>
@@ -58,9 +58,9 @@
   <div class="header-buttons">
     {{if .IsAuthenticated}}
       <a class="btnLogin profile" href="/user/profile/{{ .UserName}}">{{ .UserName}}</a>
-      <a class="btnLogin" href="/user/logout">Logout</a>
+      <a class="btnLogin" href="/user/logout">Шығу</a>
       {{else}}
-      <a class="btnLogin" href="/user/login">Login</a>
+      <a class="btnLogin" href="/user/login">Кіру</a>
       {{end}}
   </div>
     <span class="icon-menu">
