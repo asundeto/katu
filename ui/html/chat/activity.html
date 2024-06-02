@@ -7,7 +7,11 @@
                 {{range .Form}}
                     <a href="/post/view/{{ .Post.ID}}">
                         {{if not .Seen}}
+                            {{if ne $.UserName .Username}}
                             <div class="activity-item act-item-notseen">
+                            {{else}}
+                            <div class="activity-item">
+                            {{end}}
                         {{else}}
                             <div class="activity-item">
                         {{end}}

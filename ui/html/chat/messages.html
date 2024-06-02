@@ -1,69 +1,213 @@
 {{define "title"}}Messages{{end}}
 {{define "main"}}
-    <div class="messages-box-back">
-        <div class="messages-box">
-            <h2>Messages</h2>
-            {{if .Form.StartedChats}}
-            <div class="users-back">
-                {{range .Form.StartedChats}}
-                    <a href='/chat/{{ .With}}'>
-                        <div class="user-row">
-                            <div class="user-row-left">
-                                <img class="user-messages-photo" src="/static/profile_photo/{{ .WithPhoto}}" alt="">
-                                {{if .WithStatus}}
-                                    <div class="user-online-status"></div>
-                                {{end}}
-                                <div class="users-name-chats">
-                                    <div class="chat-with">
-                                        {{ .With}}
-                                    </div> 
-                                    <div class="chat-last-message">
-                                        {{ .LastMessage}}
-                                    </div>
-                                </div>
-                                <div class="users-name-chats-end">
-                                    <div class="last-message-time">
-                                        {{ .LastMessageTime}}
-                                    </div>
-                                    {{if ne .UnseenMessagesCount 0}}
-                                        <div class="unseen-messages-count">
-                                            {{.UnseenMessagesCount}}
+    <div class="messages-box-back" id="messages-box-back">
+        <div class="my-chats-box" id="my-chats-box">
+            <div class="my-chats-box-inner">
+                <div class="messages-chat-header">
+                    <div class="messages-chat-header-menu-back">
+                        <img class="messages-chat-header-menu" id="messages-chat-header-menu" src="/static/img/menu.png" alt="">
+                    </div>
+                    <div class="messages-chat-header-search-back" id="messages-chat-header-search-back">
+                        <img class="messages-chat-header-search" src="/static/img/search.png" alt="">
+                        <input type="text" placeholder="Search">
+                    </div>
+                </div>
+                <div class="my-chats-box-show" id="my-chats-box-show">
+                    <div class="chats-switcher">
+                        <div class="chats-swither-back">
+                            <h3 class="font-active" id="my-chats-btn">My chats</h3>
+                        </div>
+                        <div class="chats-swither-back">
+                            <h3 id="all-users-btn">All users</h3>
+                        </div>
+                        
+                        
+                    </div>
+                    <hr>
+                    <div class="all-exist-chats-container active-pop" id="all-exist-chats-container">
+                        <div class="chats-wrapper started-chats-box-inner">
+                            {{if .Form.StartedChats}}
+                                {{range .Form.StartedChats}}
+                                    <div onclick="openChat('{{.With}}')">
+                                        <div class="user-row" id="user-row">
+                                            <div class="user-row-left">
+                                                <img class="user-messages-photo" src="/static/profile_photo/{{ .WithPhoto}}" alt="">
+                                                {{if .WithStatus}}
+                                                    <div class="user-online-status"></div>
+                                                {{end}}
+                                                <div class="users-name-chats">
+                                                    <div class="chat-with">
+                                                        {{ .With}}
+                                                    </div> 
+                                                    <div class="chat-last-message">
+                                                        {{ .LastMessage}}
+                                                    </div>
+                                                </div>
+                                                <div class="users-name-chats-end">
+                                                    <div class="last-message-time">
+                                                        {{ .LastMessageTime}}
+                                                    </div>
+                                                    {{if ne .UnseenMessagesCount 0}}
+                                                        <div class="unseen-messages-count">
+                                                            {{.UnseenMessagesCount}}
+                                                        </div>
+                                                    {{end}}
+                                                </div>
+                                                
+                                            </div>
                                         </div>
-                                    {{end}}
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </a>
-                {{end}}
-            </div>
-            {{else}}
-            No started chats
-            {{end}}
-        </div>
-        <div class="messages-box">
-            <h2>Users</h2>
-            {{if .Form.Users}}
-            <div class="users-back">
-                {{range .Form.Users}}
-                    <a href='/user/profile/{{ .Name}}'>
-                        <div class="user-row">
-                            <div class="user-row-left">
-                                <img class="user-messages-photo" src="/static/profile_photo/{{ .ProfilePhoto}}" alt="">
-                                {{if .Online}}
-                                <div class="user-online-status"></div>
+                                    </div>
                                 {{end}}
-                                <div class="users-name">
-                                    {{ .Name}}
-                                </div>
-                            </div>
+                            {{else}}
+                            <h4>No started chats</h4>
+                            {{end}}
                         </div>
-                    </a>
+                        <div class="chats-wrapper all-users-box-inner">
+                            {{if .Form.Users}}
+                            <div class="users-back">
+                                {{range .Form.Users}}
+                                    <div onclick="openChat('{{.Name}}')">
+                                        <div class="user-row">
+                                            <div class="user-row-left">
+                                                <img class="user-messages-photo" src="/static/profile_photo/{{ .ProfilePhoto}}" alt="">
+                                                {{if .Online}}
+                                                <div class="user-online-status"></div>
+                                                {{end}}
+                                                <div class="users-name">
+                                                    {{ .Name}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{end}}
+                            </div>
+                            {{else}}
+                            No users found
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-message-box" id="chat-message-box">
+            <div class="chat-message-box-inner">
+                {{if .Form.ChatWith.With}}
+                    <div class="chat-user-info">
+                        <div class="chat-arrow-back-btn-back">
+                            <img class="chat-arrow-back-btn" id="chat-arrow-back-btn" src="/static/img/arrow-back.png">
+                        </div>
+                        <a class="chat-user-info" href='/user/profile/{{ .Form.ChatWith.With}}'>
+                            <img class="messages-chat-with-photo" src="/static/profile_photo/{{ .Form.ChatWith.WithPhoto}}" alt="">
+                            {{if .Form.ChatWith.WithStatus}} 
+                                <div class="user-chat-online-status"></div>
+                            {{end}}
+                            <h3 id="user-messages-username" class="user-messages-username">{{ .Form.ChatWith.With}}</h3>
+                        </a>
+                    </div>
+                <div class="messages-main">
+                    <div class="messages-chat-window" id="messagesChatWindow">
+                        {{if .Form}}
+                                {{range .Form.ChatWith.History}}
+                                    {{if eq .Type "calendar"}}
+                                        <div class="chat-message-date">
+                                            {{ .Message}}
+                                        </div>
+                                    {{else}}
+                                    {{if eq $.UserName .Author}}
+                                        <div class="every-message-left">
+                                            {{if .Path}}
+                                                <div class="own-message own-image-message">
+                                                        <div class="image-message-box" id="image-message-box">
+                                                            <img class="chat-image-right" class="check-mark" src="/static/chat_images/{{.Path}}" alt="">
+                                                            <div class="image-message-info">
+                                                                <div class="image-message-info-inner">
+                                                                    <div class="message-time-left">
+                                                                        {{ .Time}}
+                                                                    </div>
+                                                                    <div class="check-mark-back">
+                                                                        {{if .Seen}}
+                                                                        <img class="check-mark" src="/static/img/checkmarkdouble.png" alt="">
+                                                                        {{else}}
+                                                                            <img class="check-mark-solo" src="/static/img/checkmarksolo.png" alt="">
+                                                                        {{end}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            {{else}}
+                                                <div class="own-message">
+                                                    <div class="message-text" id="message-text">
+                                                        {{ .Message}}
+                                                    </div>
+                                                    <div class="message-time-left">
+                                                        {{ .Time}}
+                                                    </div>
+                                                    <div class="check-mark-back">
+                                                        {{if .Seen}}
+                                                        <img class="check-mark" src="/static/img/checkmarkdouble.png" alt="">
+                                                        {{else}}
+                                                            <img class="check-mark-solo" src="/static/img/checkmarksolo.png" alt="">
+                                                        {{end}}
+                                                    </div>
+                                                </div>
+                                            {{end}}
+                                        </div>
+                                        {{else}}
+                                            <div class="every-message-right">
+                                                {{if .Path}}
+                                                    <div class="own-message own-image-message">
+                                                        <div class="image-message-box" id="image-message-box">
+                                                            <img class="chat-image-left" class="check-mark" src="/static/chat_images/{{.Path}}" alt="">
+                                                            <div class="image-message-info">
+                                                                <div class="image-message-info-inner">
+                                                                    <div class="message-time-left">
+                                                                        {{ .Time}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {{else}}
+                                                    <div class="own-message own-message-left">
+                                                        <div class="message-text" id="message-text">
+                                                            {{ .Message}}
+                                                        </div>
+                                                        <div class="message-time-left">
+                                                            {{ .Time}}
+                                                        </div>
+                                                    </div>
+                                                {{end}}
+                                            </div>
+                                        {{end}}
+                                    {{end}}
+                                {{end}}
+                        {{end}}
+                        <div class="chatUplodedImageShowBack" id="chatUplodedImageShowBack">
+                            <img class="showChatUploadedImage" id="showChatUploadedImage"></img>
+                        </div>
+                        <div class="chatImageDrop" id="chatImageDrop">
+                            
+                        </div>
+                    </div>
+                </div>
+                    <div class="input-main-back">
+                        <div class="input-back">
+                            <input id="chat-input" class="chat-input" type="text" name="message" placeholder="Send message" onkeydown="handleKeyDown(event)">
+                        </div>
+                        <div class="scroll-down-btn-back">
+                            <img id="scrollDownBtn" class="scroll-down-btn" src="/static/img/scrolldown.png">
+                        </div>
+                        <form class="skrepka-back" id="formSkrepkaBack" enctype="multipart/form-data">
+                            <img class="skrepka" id="chatUploadImage" src="/static/img/skrepka.png" alt="">
+                            <input name="chatImageInput" type="file" id="chatFileUploader" style="display: none;">
+                        </form>
+                        <div class="send-button-back">
+                            <img id="chat-submit" class="send-button" src="/static/img/send.png" alt="submit" onclick="sendMessage()">
+                        </div>
+                    </div>
                 {{end}}
             </div>
-            {{else}}
-            No users found
-            {{end}}
         </div>
     </div>
 {{end}}

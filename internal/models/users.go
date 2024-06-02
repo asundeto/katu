@@ -44,8 +44,8 @@ func (m *UserModel) Insert(name, email, password, profile_photo string) error {
 
 func (m *UserModel) EmailExist(email string) error {
 	var count int
-	stmt := "SELECT COUNT(*) FROM users WHERE email = ?"
-	err := m.DB.QueryRow(stmt, email).Scan(&count)
+	stmt := "SELECT COUNT(*) FROM users WHERE email = ? OR name = ?"
+	err := m.DB.QueryRow(stmt, email, email).Scan(&count)
 	if err != nil {
 		return err
 	}
@@ -58,8 +58,8 @@ func (m *UserModel) EmailExist(email string) error {
 func (m *UserModel) Authenticate(email, password string) (int, error) {
 	var id int
 	var hashedPassword []byte
-	stmt := "SELECT id, hashed_password FROM users WHERE email = ?"
-	err := m.DB.QueryRow(stmt, email).Scan(&id, &hashedPassword)
+	stmt := "SELECT id, hashed_password FROM users WHERE email = ? OR name = ?"
+	err := m.DB.QueryRow(stmt, email, email).Scan(&id, &hashedPassword)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return 0, errorhandler.ErrEmailExist
@@ -80,10 +80,10 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 }
 
 func (u *UserModel) GetUserNameByEmail(email string) (string, error) {
-	stmt := `SELECT name FROM Users WHERE email = ?`
+	stmt := `SELECT name FROM Users WHERE email = ? OR name = ?`
 
 	var name string
-	err := u.DB.QueryRow(stmt, email).Scan(&name)
+	err := u.DB.QueryRow(stmt, email, email).Scan(&name)
 	if err != nil {
 		return "", err
 	}
@@ -236,7 +236,7 @@ func (u *UserModel) GetPhotoByUserName(username string) (string, error) {
 	var profilePhoto string
 	err := u.DB.QueryRow(stmt, username).Scan(&profilePhoto)
 	if err != nil {
-		return "", err
+		return "", nil
 	}
 	return profilePhoto, nil
 }

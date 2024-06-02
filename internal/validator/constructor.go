@@ -45,10 +45,10 @@ func AddCategoriesToData(data *template.TemplateData) *template.TemplateData {
 }
 
 func (c *Constructor) PostCreateCheck(form *models.PostCreateForm) *models.PostCreateForm {
-	if ValidPostTitle(form.Title) != nil {
+	if ValidPostTitle(form.Title) != "" {
 		form.Error.TitleError = ValidPostTitle(form.Title)
 	}
-	if ValidPostContent(form.Content) != nil {
+	if ValidPostContent(form.Content) != "" {
 		form.Error.ContentError = ValidPostContent(form.Content)
 	}
 	return form

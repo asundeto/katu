@@ -49,7 +49,7 @@
     <div class="container"> 
         <ul class="ks-cboxtags-post">
             {{range .PostCategoriesForm}}
-            <li><input type="hidden" id="checkboxOne"><label for="checkboxOne">{{ .CategoriesName}}</label></li>
+            <a href="/post/category/{{ .CategoriesName}}"><li><input type="hidden" id="checkboxOne"><label for="checkboxOne">{{ .CategoriesName}}</label></li></a>
             {{end}}
         </ul>
     </div>

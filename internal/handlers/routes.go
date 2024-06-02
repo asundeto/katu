@@ -29,7 +29,7 @@ func (app *Application) Routes() *http.ServeMux {
 	mux.Handle("/user/register", NewRateLimiter(10, time.Minute).LimitMiddleware(app.UserRegisterPost))
 	mux.Handle("/chat/", app.RequireAuthentication(app.Chat))
 	mux.Handle("/user/profile/", NewRateLimiter(10, time.Minute).LimitMiddleware(app.RequireAuthentication(app.ProfileRoute)))
-	mux.Handle("/messages", NewRateLimiter(50, time.Minute).LimitMiddleware(app.RequireAuthentication(app.Messages)))
+	mux.Handle("/messages", NewRateLimiter(1000, time.Minute).LimitMiddleware(app.RequireAuthentication(app.Messages)))
 	mux.Handle("/activity", NewRateLimiter(50, time.Minute).LimitMiddleware(app.RequireAuthentication(app.Activity)))
 	mux.Handle("/remove/activity/", NewRateLimiter(50, time.Minute).LimitMiddleware(app.RequireAuthentication(app.RemoveActivity)))
 	mux.Handle("/post/create/post", NewRateLimiter(10, time.Minute).LimitMiddleware(app.RequireAuthentication(app.PostCreatePost)))

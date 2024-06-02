@@ -154,18 +154,18 @@ func ValidChatUserName2(r *http.Request) string {
 	return username
 }
 
-func ValidPostTitle(s string) error {
+func ValidPostTitle(s string) string {
 	if len(s) < 3 || len(s) > 20 {
-		return errorhandler.ErrPostTitle
+		return errorhandler.ErrPostTitle.Error()
 	}
-	return nil
+	return ""
 }
 
-func ValidPostContent(s string) error {
+func ValidPostContent(s string) string {
 	if len(s) < 5 || len(s) > 400 {
-		return errorhandler.ErrPostContent
+		return errorhandler.ErrPostContent.Error()
 	}
-	return nil
+	return ""
 }
 
 func ToUpperFirst(s string) string {
@@ -201,11 +201,11 @@ func GetCurrentTime() string {
 	return formattedTime
 }
 
-// func CurrentTimeDateTime() string {
-// 	currentTime := time.Now()
-// 	formattedTime := currentTime.Format("02:01:2006 15:04")
-// 	return formattedTime
-// }
+func GetCurrentDate() string {
+	currentTime := time.Now()
+	formattedDate := currentTime.Format("02.01.2006 15:04")
+	return formattedDate
+}
 
 func ChatMessageCorrector(input string) string {
 	var result strings.Builder

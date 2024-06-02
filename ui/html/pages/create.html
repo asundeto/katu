@@ -1,26 +1,21 @@
 {{define "title"}}Create{{end}}
 {{define "main"}}
 <div class="create">
-  <form action="/post/create/post" method="POST" enctype="multipart/form-data">
+  <form id="createPostForm" enctype="multipart/form-data">
     <h2>New Post</h2>
     <textarea spellcheck="false" placeholder="Title" required name="title" id="post-title"></textarea>
-        {{if .Form}}
-        <h5>{{ .Form.Error.TitleError}}</h5>
-        {{end}}
+        <h5 id="title-error"></h5>
     <textarea class="myarea" spellcheck="false" placeholder="Type something here..." name="content" id="post-content"
       required></textarea>
-          {{if .Form}}
-          <h5>{{ .Form.Error.ContentError}}</h5>
-          {{end}}
+          <h5 id="content-error"></h5>
       <!-- Drop and draw -->
       <div class="drop-area" id="drop-area">
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
         <label class="image-file-upload-text" for="fileInput">Drag and drop an image here or click to select</label> 
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
       </div>
-          {{if .Form}}
-          <h5>{{ .Form.Error.ImageError}}</h5>
-          {{end}}
+      <img class="show-uploaded-image" id="show-uploaded-image"></img>
+      <h5 id="image-error"></h5>
       <div class="post-image-message"></div>
     
       <div class="create-types-btn" id="create-types-btn">
@@ -36,14 +31,8 @@
       </ul>
     </div>
     <div class="center">
-      <button type="submit" class="create_btn">Create</button>
+      <div class="simple-btn" onclick="createPost()">Create</div>
     </div>
   </form>
 </div>
-{{if .Form}}
-<div class="invisible_info">
-  <div id="ReturnedPostTitle">{{.Form.Title}}</div>
-  <div id="ReturnedPostContent">{{.Form.Content}}</div>
-</div>
-{{end}}
 {{end}}

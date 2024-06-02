@@ -18,9 +18,9 @@ type PostCreateForm struct {
 }
 
 type PostCreateFormError struct {
-	TitleError   error
-	ContentError error
-	ImageError   error
+	TitleError   string
+	ContentError string
+	ImageError   string
 }
 
 type PostCategoriesForm struct {
@@ -122,7 +122,11 @@ func (m *Model) ActivityInsert(username, typeOf string, postId, commentId, seen 
 		if err != nil {
 			return err
 		}
-		author = comment.Author
+		if typeOf == "createcomment" {
+			author = post.UserName
+		} else {
+			author = comment.Author
+		}
 	} else {
 		author = post.UserName
 	}
@@ -579,22 +583,27 @@ func GetComment(messagesData string) (*Comment, error) {
 }
 
 func (m *Model) GetUnseenActivityCount(username string) (int, error) {
-	stmt := `SELECT COUNT(*) FROM Activity WHERE seen = 0 AND username = ? AND author != ?`
+	stmt := `SELECT COUNT(*) FROM Activity WHERE seen = 0 AND username != ? AND author = ?`
 	var count int
-
 	row := m.DB.QueryRow(stmt, username, username)
 	err := row.Scan(&count)
 	if err != nil {
 		return 0, err
 	}
-
 	return count, nil
 }
 
 func (m *Model) MarkAllAsSeen(username string) error {
-	stmt := `UPDATE Activity SET seen = 1 WHERE seen = 0 AND username = ?`
+	stmt := `UPDATE Activity SET seen = 1 WHERE seen = 0 AND username != ? AND author = ?`
 
-	_, err := m.DB.Exec(stmt, username)
+	_, err := m.DB.Exec(stmt, username, username)
+	if err != nil {
+		return err
+	}
+
+	stmt2 := `UPDATE Activity SET seen = 1 WHERE seen = 0 AND username = ? AND author = ?`
+
+	_, err = m.DB.Exec(stmt2, username, username)
 	if err != nil {
 		return err
 	}

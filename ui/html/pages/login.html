@@ -4,32 +4,20 @@
   <div class="wrapper active-pop">
     <div class="form-box login">
       <h2>Login</h2>
-      <form action="/user/login/post" method="POST">
+      <form id="loginForm">
         <div class="input-box">
-          <span class="icon">
-            <ion-icon name="mail"></ion-icon>
-          </span>
+          
           <input class="log-email" type="text" name="email" maxlength="30" required>
           <label>Email</label>
         </div>
 
         <div class="input-box">
-          <span class="icon">
-            <ion-icon class="log-icon-lock1 log-icon-lock" name="lock-closed"></ion-icon>
-          </span>
+          
           <input class="log-pass" id="password-label-log" type="password" name="password" maxlength="25" required>
           <label>Password</label>
         </div>
 
-        
-
-        <div class="input-box inperr" id="error-window-box"> <!--ERROR ---- MSG -->
-          <span class="icon">
-            <ion-icon name="alert-circle-outline"></ion-icon>
-          </span>
-          <label id="error-window-log"></label>
-        </div>
-
+        <div class="auth-error" id="login-error"></div>
 
         <div class="remember-forgot">
           <label><input type="checkbox">
@@ -51,9 +39,8 @@
             </div>
           </a>
         </div>
-        
 
-        <button type="submit" class="btn">Login</button>
+        <div class="btn" onclick="login()">Login</div>
         <div class="login-register">
           <p>Don't have an account?<a href="#" class="register-link"> Register</a></p>
         </div>
@@ -65,60 +52,40 @@
 
     <div class="form-box register">
       <h2>Registration</h2>
-      <form action="/user/register" method="POST">
+      <form id="register-form">
         <div class="input-box">
-          <span class="icon">
-            <ion-icon name="person"></ion-icon>
-          </span>
+          
           <input id="reg-username" class="reg-username" type="text" name="username" maxlength="20" required>
           <label>Username</label>
         </div>
 
 
         <div class="input-box">
-          <span class="icon">
-            <ion-icon name="mail"></ion-icon>
-          </span>
+          
           <input class="reg-email" type="text" name="email" maxlength="40" required>
           <label>Email</label>
         </div>
 
 
         <div class="input-box">
-          <span class="icon">
-            <ion-icon class="log-icon-lock2 log-icon-lock" name="lock-closed"></ion-icon>
-          </span>
+          
           <input class="reg-password" id="password-label-reg" type="password" name="password" required>
           <label>Password</label>
         </div>
 
 
         <div class="input-box">
-          <span class="icon">
-            <ion-icon class="log-icon-lock3 log-icon-lock" name="lock-closed"></ion-icon>
-          </span>
+          
           <input class="reg-password-second" id="password-label-reg2" type="password" name="password-repeat" required>
           <label>Repeat password</label>
         </div>
 
 
-        <div class="input-box inperr" id="error-window-box2"> <!--ERROR ---- MSG -->
-          <span class="icon">
-            <ion-icon name="alert-circle-outline"></ion-icon>
-          </span>
-          <label id="error-window-log2">ERROR</label>
-        </div>
+        <div class="auth-error" id="register-error"></div>
 
         <div class="remember-forgot">
-          <label><input name="checkbox" type="checkbox">
+          <label><input id="register-checkbox" name="checkbox" type="checkbox">
             I agree to the terms & conditions </label>
-        </div>
-        
-        <div class="input-box inperr" id="error-window-box2"> <!--ERROR ---- MSG -->
-          <span class="icon">
-            <ion-icon name="alert-circle-outline"></ion-icon>
-          </span>
-          <label id="error-window-log2"></label>
         </div>
 
         <div class="auth_link_main-back">
@@ -136,7 +103,7 @@
           </a>
         </div>
 
-        <button type="submit" id="btn-reg" class="btn">Register</button>
+        <div id="btn-reg" class="btn" onclick="register()">Register</div>
         <div class="login-register">
           <p>Already have an account? <a href="#" class="login-link"> Login</a></p>
         </div>
@@ -145,13 +112,4 @@
     </div>
   </div>
 </div>
-<div class="invisible_info">
-  <div id="form-act">{{.Form.Form}}</div>
-  <div id="form-error">{{.Form.Error}}</div>
-  <div id="ReturnedEmail">{{.Form.ReturnedEmail}}</div>
-  <div id="ReturnedUsername">{{.Form.ReturnedUsername}}</div>
-  <div id="ReturnedPass">{{.Form.ReturnedPass}}</div>
-  <div id="ReturnedPass2">{{.Form.ReturnedPass2}}</div>
-</div>
-
 {{end}}

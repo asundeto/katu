@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -21,7 +22,7 @@ func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 	session := app.SessionCheck(w, r)
 	data := app.NewTemplateData(r)
 	data = app.SetUserName(data, session)
-	data, err := app.NofifCountSet(data)
+	data, err := app.NotifCountSet(data)
 	if err != nil {
 		app.ServerError(w, err, r)
 		return
@@ -43,7 +44,7 @@ func (app *Application) PostCreate(w http.ResponseWriter, r *http.Request, form 
 	data.Categories = app.categories
 	data.Form = form
 	data = app.SetUserName(data, session)
-	data, err := app.NofifCountSet(data)
+	data, err := app.NotifCountSet(data)
 	if err != nil {
 		app.ServerError(w, err, r)
 		return
@@ -54,9 +55,15 @@ func (app *Application) PostCreate(w http.ResponseWriter, r *http.Request, form 
 func (app *Application) PostCreatePost(w http.ResponseWriter, r *http.Request) {
 	session := app.SessionCheck(w, r)
 	form := app.PostCreateFormFunc(r)
-	if form.Error.TitleError != nil || form.Error.ContentError != nil || form.Error.ImageError != nil {
-		app.PostCreate(w, r, form)
+	if form.Error.TitleError != "" || form.Error.ContentError != "" || form.Error.ImageError != "" {
+		jsonResponse, err := json.Marshal(form.Error)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		http.Error(w, string(jsonResponse), http.StatusBadRequest)
 		return
+		// app.PostCreate(w, r, form)
 	}
 	id, err := app.Posts.Insert(form.Title, form.Content, form.Category, session.UserName, form.Image)
 	if err != nil {
@@ -94,7 +101,7 @@ func (app *Application) PostView(w http.ResponseWriter, r *http.Request, msg err
 		return
 	}
 	data := app.PostForm(r, post, comments, session, msg)
-	data, err = app.NofifCountSet(data)
+	data, err = app.NotifCountSet(data)
 	if err != nil {
 		app.ServerError(w, err, r)
 		return
@@ -139,7 +146,7 @@ func (app *Application) Profile(w http.ResponseWriter, r *http.Request, msg erro
 		return
 	}
 	data.Form = ProfileForm(username, data.UserName, email, profile_photo, msg)
-	data, err = app.NofifCountSet(data)
+	data, err = app.NotifCountSet(data)
 	if err != nil {
 		app.ServerError(w, err, r)
 		return
@@ -183,7 +190,7 @@ func (app *Application) SessionCheck(w http.ResponseWriter, r *http.Request) *mo
 
 func (app *Application) UserLogin(w http.ResponseWriter, r *http.Request) {
 	data := app.NewTemplateData(r)
-	data.Form = Msg{}
+	data.Form = AuthError{}
 	app.Render(w, http.StatusOK, "login.html", data, r)
 }
 
@@ -196,14 +203,15 @@ func (app *Application) UserLoginPost(w http.ResponseWriter, r *http.Request) {
 	email, password := strings.ToLower(r.FormValue("email")), r.FormValue("password")
 	id, err := app.LoginCheckAuth(email, password)
 	if err != nil {
-		data := app.NewTemplateData(r)
-		data.Form = Msg{
-			Form:          "Log",
-			Error:         err,
-			ReturnedEmail: email,
-			ReturnedPass:  password,
+		loginError := AuthError{
+			Error: err.Error(),
 		}
-		app.Render(w, http.StatusUnprocessableEntity, "login.html", data, r)
+		jsonResponse, err := json.Marshal(loginError)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		http.Error(w, string(jsonResponse), http.StatusBadRequest)
 		return
 	}
 	userName, err := app.Users.GetUserNameByEmail(email)
@@ -233,23 +241,19 @@ func (app *Application) UserRegisterPost(w http.ResponseWriter, r *http.Request)
 		app.ClientError(w, r)
 		return
 	}
-	data := app.NewTemplateData(r)
 	email, username, password, passwordRepeat, checkbox := strings.ToLower(r.FormValue("email")), r.FormValue("username"), r.FormValue("password"), r.FormValue("password-repeat"), r.FormValue("checkbox")
 	checkResult := app.CheckRegisterData(email, username, password, passwordRepeat, checkbox)
 	if checkResult != nil {
-		data.Form = Msg{
-			Form:             "Reg",
-			ReturnedEmail:    email,
-			ReturnedPass:     password,
-			ReturnedPass2:    passwordRepeat,
-			ReturnedUsername: username,
-			Error:            checkResult,
+		loginError := AuthError{
+			Error: checkResult.Error(),
 		}
-		app.Render(w, http.StatusOK, "login.html", data, r)
+		jsonResponse, err := json.Marshal(loginError)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		http.Error(w, string(jsonResponse), http.StatusBadRequest)
 		return
-	}
-	data.Form = Msg{
-		Form: "Log",
 	}
 	app.UserLogin(w, r)
 }
@@ -294,6 +298,182 @@ func (app *Application) isAuthenticated(r *http.Request) bool {
 	return true
 }
 
+// Open messages page with render all info about it
+
+func (app *Application) Messages(w http.ResponseWriter, r *http.Request) {
+	session := app.SessionCheck(w, r)
+	data := app.NewTemplateData(r)
+	data = app.SetUserName(data, session)
+	users, err := app.Posts.GetAllUsers(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	chats, err := app.Users.GetMyChats(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	form := MessagesStruct{
+		StartedChats: chats,
+		ChatWith:     ChatWith{},
+		Users:        users,
+	}
+	data.Form = form
+	data, err = app.NotifCountSet(data)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	app.Render(w, http.StatusOK, "messages.html", data, r)
+}
+
+// Open exist chat or creating new function
+
+func (app *Application) OpenChat(w http.ResponseWriter, r *http.Request) {
+	chatUserName := validator.ValidChatUserName(r)
+	session := app.SessionCheck(w, r)
+	data := app.NewTemplateData(r)
+	data = app.SetUserName(data, session)
+	chatWith := ChatWith{}
+	history := []models.MessageStruct{}
+	if chatUserName != "" {
+		chatUserPhoto, err := app.Users.GetPhotoByUserName(chatUserName)
+		if err != nil {
+			app.ServerError(w, err, r)
+			return
+		}
+		history, err = app.Users.GetHistoryOfChat(data.UserName, chatUserName)
+		if err != nil {
+			app.ServerError(w, err, r)
+			return
+		}
+		isOnline := app.Users.GetUserStatus(chatUserName) == 1
+		chatWith = ChatWith{
+			With:       chatUserName,
+			WithPhoto:  chatUserPhoto,
+			WithStatus: isOnline,
+			History:    history,
+		}
+	}
+	users, err := app.Posts.GetAllUsers(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	chats, err := app.Users.GetMyChats(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+
+	//-----------------------------------------------------------
+	data.Form = MessagesStruct{
+		StartedChats: chats,
+		ChatWith:     chatWith,
+		Users:        users,
+	}
+	data, err = app.NotifCountSet(data)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	app.Render(w, http.StatusOK, "messages.html", data, r)
+	err = app.Users.UpdateChatHistory(data.UserName, chatUserName, history)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+}
+
+// Sending message
+
+func (app *Application) SendMessage(w http.ResponseWriter, r *http.Request) {
+	chatUserName := validator.ValidChatUserName(r)
+	message := validator.ChatMessageCorrector(r.FormValue("message"))
+	typeImage := false
+	imagePath := ""
+	if message == "" {
+		// fmt.Println("IMAGE", r.FormValue("chatImageInput"))
+		file, header, err := r.FormFile("chatImageInput")
+		if err != nil {
+			return
+		}
+		imagePath, err = app.uploadImage("chat_images", file, header)
+		if err != nil {
+			return
+		}
+		typeImage = true
+	}
+	session := app.SessionCheck(w, r)
+	data := app.NewTemplateData(r)
+	data = app.SetUserName(data, session)
+	messageStruct := models.MessageStruct{}
+	if typeImage {
+		messageStruct = models.MessageStruct{
+			Message: message,
+			Time:    validator.GetCurrentTime(),
+			Date:    validator.GetCurrentDate(),
+			Type:    "image",
+			Path:    imagePath,
+			Author:  data.UserName,
+		}
+	} else {
+		messageStruct = models.MessageStruct{
+			Message: message,
+			Time:    validator.GetCurrentTime(),
+			Date:    validator.GetCurrentDate(),
+			Type:    "message",
+			Path:    "",
+			Author:  data.UserName,
+		}
+	}
+	err := app.Users.InsertChat(data.UserName, chatUserName, messageStruct)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	app.OpenChat(w, r)
+}
+
+// Activities page open function
+
+func (app *Application) Activity(w http.ResponseWriter, r *http.Request) {
+	session := app.SessionCheck(w, r)
+	data := app.NewTemplateData(r)
+	data = app.SetUserName(data, session)
+	activities, err := app.Posts.ActivitiesGet(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	data.Form = activities
+	err = app.Posts.MarkAllAsSeen(data.UserName)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	data, err = app.NotifCountSet(data)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	app.Render(w, http.StatusOK, "activity.html", data, r)
+}
+
+//Remove Activity Function
+
+func (app *Application) RemoveActivity(w http.ResponseWriter, r *http.Request) {
+	id := validator.ValidActivityID(r)
+	activity, err := app.Posts.ActivityGet(id)
+	if err != nil {
+		app.ServerError(w, err, r)
+		return
+	}
+	app.RemoveActionUndo(activity)
+	app.Activity(w, r)
+}
+
 func (app *Application) ErrorHandler(w http.ResponseWriter, errorNum int, r *http.Request) {
 	data := app.NewTemplateData(r)
 	Res := &models.ErrorStruct{
@@ -311,7 +491,7 @@ func (app *Application) ErrorHandler(w http.ResponseWriter, errorNum int, r *htt
 		data = app.SetUserName(data, session)
 	}
 	data.ErrorStruct = Res
-	data, err := app.NofifCountSet(data)
+	data, err := app.NotifCountSet(data)
 	if err != nil {
 		app.ServerError(w, err, r)
 		return
@@ -334,114 +514,4 @@ func (app *Application) LikeCommentHandler(w http.ResponseWriter, r *http.Reques
 }
 func (app *Application) DislikeCommentHandler(w http.ResponseWriter, r *http.Request) {
 	app.ReactionCommentHandler(w, r, false)
-}
-
-func (app *Application) Messages(w http.ResponseWriter, r *http.Request) {
-	session := app.SessionCheck(w, r)
-	data := app.NewTemplateData(r)
-	data = app.SetUserName(data, session)
-	users, err := app.Posts.GetAllUsers(data.UserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	chats, err := app.Users.GetMyChats(data.UserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	form := MessagesStruct{
-		StartedChats: chats,
-		Users:        users,
-	}
-	data.Form = form
-	data, err = app.NofifCountSet(data)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	app.Render(w, http.StatusOK, "messages.html", data, r)
-}
-
-func (app *Application) OpenChat(w http.ResponseWriter, r *http.Request) {
-	chatUserName := validator.ValidChatUserName(r)
-	chatUserPhoto, err := app.Users.GetPhotoByUserName(chatUserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	session := app.SessionCheck(w, r)
-	data := app.NewTemplateData(r)
-	data = app.SetUserName(data, session)
-	history, err := app.Users.GetHistoryOfChat(data.UserName, chatUserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	isOnline := app.Users.GetUserStatus(chatUserName) == 1
-	data.Form = ChatWith{
-		With:       chatUserName,
-		WithPhoto:  chatUserPhoto,
-		WithStatus: isOnline,
-		History:    history,
-	}
-	data, err = app.NofifCountSet(data)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	app.Render(w, http.StatusOK, "chat.html", data, r)
-	err = app.Users.UpdateChatHistory(data.UserName, chatUserName, history)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-}
-
-func (app *Application) SendMessage(w http.ResponseWriter, r *http.Request) {
-	chatUserName := validator.ValidChatUserName(r)
-	message := validator.ChatMessageCorrector(r.FormValue("message"))
-	session := app.SessionCheck(w, r)
-	data := app.NewTemplateData(r)
-	data = app.SetUserName(data, session)
-	messageForm := models.MessageSolo{
-		Message: message,
-		Time:    validator.GetCurrentTime(),
-		Author:  data.UserName,
-	}
-	err := app.Users.InsertChat(data.UserName, chatUserName, messageForm)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	app.OpenChat(w, r)
-}
-
-func (app *Application) Activity(w http.ResponseWriter, r *http.Request) {
-	session := app.SessionCheck(w, r)
-	data := app.NewTemplateData(r)
-	data = app.SetUserName(data, session)
-	activities, err := app.Posts.ActivitiesGet(data.UserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	data.Form = activities
-	err = app.Posts.MarkAllAsSeen(data.UserName)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	app.Render(w, http.StatusOK, "activity.html", data, r)
-}
-
-func (app *Application) RemoveActivity(w http.ResponseWriter, r *http.Request) {
-	id := validator.ValidActivityID(r)
-	activity, err := app.Posts.ActivityGet(id)
-	if err != nil {
-		app.ServerError(w, err, r)
-		return
-	}
-	app.RemoveActionUndo(activity)
-	app.Activity(w, r)
 }

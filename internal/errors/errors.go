@@ -21,3 +21,7 @@ var (
 	ErrPostImageSize      = errors.New("Image size is more than 20mb!")
 	ErrUploadImage        = errors.New("Please upload a correct image!")
 )
+
+var (
+	ErrTooManyRequests = errors.New("Too many request")
+)

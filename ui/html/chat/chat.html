@@ -1,6 +1,6 @@
 {{define "title"}}Chat{{end}}
 {{define "main"}}
-    <div class="messages-box">
+    <div class="messages-box chat-message-box">
         <div class="chat-user-info">
             <a href='/user/profile/{{ .Form.With}}'><img class="user-messages-photo" src="/static/profile_photo/{{ .Form.WithPhoto}}" alt=""></a>
             {{if .Form.WithStatus}} 
@@ -15,7 +15,7 @@
                             {{if eq $.UserName .Author}}
                                 <div class="every-message-left">
                                     <div class="own-message">
-                                        {{ .Message}}
+                                        <div class="message-text" id="message-text">{{ .Message}}</div>
                                         <div class="message-time-left">
                                             {{ .Time}}
                                         </div>
@@ -30,8 +30,8 @@
                                 </div>
                                 {{else}}
                                 <div class="every-message-right">
-                                    <div class="own-message">
-                                        {{ .Message}}
+                                    <div class="own-message own-message-left">
+                                        <div class="message-text" id="message-text">{{ .Message}}</div>
                                         <div class="message-time-left">
                                             {{ .Time}}
                                         </div>

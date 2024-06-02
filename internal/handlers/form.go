@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -37,13 +36,8 @@ type CommentCreateForm struct {
 	validator.Validator
 }
 
-type Msg struct {
-	Form             string
-	Error            error
-	ReturnedEmail    string
-	ReturnedPass     string
-	ReturnedPass2    string
-	ReturnedUsername string
+type AuthError struct {
+	Error string
 }
 
 type UserInfo struct {
@@ -53,6 +47,7 @@ type UserInfo struct {
 
 type MessagesStruct struct {
 	StartedChats []models.StartedChat
+	ChatWith     ChatWith
 	Users        []*models.User
 }
 
@@ -60,7 +55,7 @@ type ChatWith struct {
 	With       string
 	WithPhoto  string
 	WithStatus bool
-	History    []models.MessageSolo
+	History    []models.MessageStruct
 }
 
 func (app *Application) ProfileForm(name, email, profilePhoto string, err error) models.User {
@@ -73,7 +68,7 @@ func (app *Application) ProfileForm(name, email, profilePhoto string, err error)
 	return form
 }
 
-func (app *Application) NofifCountSet(data *template.TemplateData) (*template.TemplateData, error) {
+func (app *Application) NotifCountSet(data *template.TemplateData) (*template.TemplateData, error) {
 	actionCnt, err := app.Posts.GetUnseenActivityCount(data.UserName)
 	if err != nil {
 		return data, err
@@ -88,20 +83,6 @@ func (app *Application) NofifCountSet(data *template.TemplateData) (*template.Te
 	}
 	return data, nil
 }
-
-// func (app *Application) MessageNofifCountSet (data *template.TemplateData) (*template.TemplateData, error) {
-// 	actionCnt, err := app.Posts.GetUnseenActivityCount(data.UserName)
-// 	if err != nil {
-// 		return data, err
-// 	}
-// 	if actionCnt != 0 {
-// 		not := models.Notifications{
-// 			ActionCount: actionCnt,
-// 		}
-// 		data.Notifications = &not
-// 	}
-// 	return data, nil
-// }
 
 func (app *Application) PostViewRoute(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
@@ -156,13 +137,8 @@ func ProfileForm(username, dataUsername, email, profile_photo string, msg error)
 
 func (app *Application) UserLoginForm(r *http.Request, form, email, password, passwordRepeat, username string, err error) *template.TemplateData {
 	data := app.NewTemplateData(r)
-	data.Form = Msg{
-		Form:             form,
-		ReturnedEmail:    email,
-		ReturnedPass:     password,
-		ReturnedPass2:    passwordRepeat,
-		ReturnedUsername: username,
-		Error:            err,
+	data.Form = AuthError{
+		Error: err.Error(),
 	}
 	return data
 }
@@ -284,11 +260,11 @@ func (app *Application) PostCreateFormFunc(r *http.Request) *models.PostCreateFo
 		Category: validator.GetCats(catForm),
 	}
 	form = app.Constructor.PostCreateCheck(form)
-	if err == nil && form.Error.TitleError == nil && form.Error.ContentError == nil {
+	if err == nil && form.Error.TitleError == "" && form.Error.ContentError == "" {
 		image, errImg = app.uploadImage("uploads", file, header)
 	}
 	if errImg != nil {
-		form.Error.ImageError = errImg
+		form.Error.ImageError = errImg.Error()
 	}
 	if image != "" {
 		form.Image = image
@@ -349,7 +325,7 @@ func (app *Application) RemoveOldPhoto(username string) error {
 
 func (app *Application) LoginCheckAuth(email, password string) (int, error) {
 	if email == "" {
-		return 0, errors.ErrUnsupported
+		return 0, errorhandler.ErrEmailExist
 	}
 	emailErr := app.Users.EmailExist(email)
 	if emailErr != nil {
