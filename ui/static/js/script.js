@@ -969,16 +969,16 @@ activityItemTypes.forEach(function(activityItemType) {
   // Apply switch case logic to each element
   switch (activityItemType.innerHTML) {
     case "createpost":
-      activityItemType.innerHTML = "You created post";
+      activityItemType.innerHTML = "Сіз пост құрдыңыз";
       break;
     case "createcomment":
-      activityItemType.innerHTML = "You created comment";
+      activityItemType.innerHTML = "Сіз комментарий жаздыңыз";
       break;
     case "reactionpost":
-      activityItemType.innerHTML = "Post reaction";
+      activityItemType.innerHTML = "Пост реакциясы";
       break;
     case "reactioncomment":
-      activityItemType.innerHTML = "Comment reaction";
+      activityItemType.innerHTML = "Комментарий реакциясы";
       break;
     default:
       activityItemType.innerHTML = "";

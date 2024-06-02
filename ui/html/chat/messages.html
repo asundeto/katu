@@ -1,4 +1,4 @@
-{{define "title"}}Messages{{end}}
+{{define "title"}}Хабарлар{{end}}
 {{define "main"}}
     <div class="messages-box-back" id="messages-box-back">
         <div class="my-chats-box" id="my-chats-box">
@@ -15,10 +15,10 @@
                 <div class="my-chats-box-show" id="my-chats-box-show">
                     <div class="chats-switcher">
                         <div class="chats-swither-back">
-                            <h3 class="font-active" id="my-chats-btn">My chats</h3>
+                            <h3 class="font-active" id="my-chats-btn">Достар</h3>
                         </div>
                         <div class="chats-swither-back">
-                            <h3 id="all-users-btn">All users</h3>
+                            <h3 id="all-users-btn">Барлығы</h3>
                         </div>
                         
                         
@@ -82,7 +82,7 @@
                                 {{end}}
                             </div>
                             {{else}}
-                            No users found
+                            Қолданушылар табылмады
                             {{end}}
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                 </div>
                     <div class="input-main-back">
                         <div class="input-back">
-                            <input id="chat-input" class="chat-input" type="text" name="message" placeholder="Send message" onkeydown="handleKeyDown(event)">
+                            <input id="chat-input" class="chat-input" type="text" name="message" placeholder="Хабар жазу" onkeydown="handleKeyDown(event)">
                         </div>
                         <div class="scroll-down-btn-back">
                             <img id="scrollDownBtn" class="scroll-down-btn" src="/static/img/scrolldown.png">

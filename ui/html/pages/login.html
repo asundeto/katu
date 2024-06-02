@@ -1,9 +1,9 @@
-{{define "title"}}Login{{end}}
+{{define "title"}}Кіру{{end}}
 {{define "main"}}
 <div class="login_back">
   <div class="wrapper active-pop">
     <div class="form-box login">
-      <h2>Login</h2>
+      <h2>Кіру</h2>
       <form id="loginForm">
         <div class="input-box">
           
@@ -14,15 +14,15 @@
         <div class="input-box">
           
           <input class="log-pass" id="password-label-log" type="password" name="password" maxlength="25" required>
-          <label>Password</label>
+          <label>Құпия сөз</label>
         </div>
 
         <div class="auth-error" id="login-error"></div>
 
         <div class="remember-forgot">
           <label><input type="checkbox">
-            Remember me</label>
-          <a href="#">Forgot password?</a>
+            Мені сақтау</label>
+          <a href="#">Құпия сөзді ұмыттыңыз ба?</a>
         </div>
 
         <div class="auth_link_main-back">
@@ -40,9 +40,9 @@
           </a>
         </div>
 
-        <div class="btn" onclick="login()">Login</div>
+        <div class="btn" onclick="login()">Кіру</div>
         <div class="login-register">
-          <p>Don't have an account?<a href="#" class="register-link"> Register</a></p>
+          <p>Аккаунт жоқ па?<a href="#" class="register-link"> Регистрация</a></p>
         </div>
 
 
@@ -51,12 +51,12 @@
 
 
     <div class="form-box register">
-      <h2>Registration</h2>
+      <h2>Регистрация</h2>
       <form id="register-form">
         <div class="input-box">
           
           <input id="reg-username" class="reg-username" type="text" name="username" maxlength="20" required>
-          <label>Username</label>
+          <label>Қолданушы атауы</label>
         </div>
 
 
@@ -70,22 +70,22 @@
         <div class="input-box">
           
           <input class="reg-password" id="password-label-reg" type="password" name="password" required>
-          <label>Password</label>
+          <label>Құпия сөз</label>
         </div>
 
 
         <div class="input-box">
           
           <input class="reg-password-second" id="password-label-reg2" type="password" name="password-repeat" required>
-          <label>Repeat password</label>
+          <label>Құпия сөз қайталау</label>
         </div>
 
 
         <div class="auth-error" id="register-error"></div>
 
         <div class="remember-forgot">
-          <label><input id="register-checkbox" name="checkbox" type="checkbox">
-            I agree to the terms & conditions </label>
+          <label><input id="register-checkbox" name="checkbox" type="checkbox">         
+            Мен шарттармен келісемін </label>
         </div>
 
         <div class="auth_link_main-back">
@@ -103,9 +103,9 @@
           </a>
         </div>
 
-        <div id="btn-reg" class="btn" onclick="register()">Register</div>
+        <div id="btn-reg" class="btn" onclick="register()">Регистрация</div>
         <div class="login-register">
-          <p>Already have an account? <a href="#" class="login-link"> Login</a></p>
+          <p>Аккаунт бар ма? <a href="#" class="login-link"> Кіру</a></p>
         </div>
 
       </form>

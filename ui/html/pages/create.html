@@ -1,17 +1,17 @@
-{{define "title"}}Create{{end}}
+{{define "title"}}Құру{{end}}
 {{define "main"}}
 <div class="create">
   <form id="createPostForm" enctype="multipart/form-data">
-    <h2>New Post</h2>
-    <textarea spellcheck="false" placeholder="Title" required name="title" id="post-title"></textarea>
+    <h2>Жаңа пост</h2>
+    <textarea spellcheck="false" placeholder="Тақырып" required name="title" id="post-title"></textarea>
         <h5 id="title-error"></h5>
-    <textarea class="myarea" spellcheck="false" placeholder="Type something here..." name="content" id="post-content"
+    <textarea class="myarea" spellcheck="false" placeholder="Осында басты мәтінді жазыңыз..." name="content" id="post-content"
       required></textarea>
           <h5 id="content-error"></h5>
       <!-- Drop and draw -->
       <div class="drop-area" id="drop-area">
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
-        <label class="image-file-upload-text" for="fileInput">Drag and drop an image here or click to select</label> 
+        <label class="image-file-upload-text" for="fileInput">Кескінді сүйреңіз немесе таңдау үшін басыңыз</label> 
         <input class="image-file-upload" type="file" name="image" id="fileInput" accept="image/*">
       </div>
       <img class="show-uploaded-image" id="show-uploaded-image"></img>
@@ -19,19 +19,19 @@
       <div class="post-image-message"></div>
     
       <div class="create-types-btn" id="create-types-btn">
-        Select type
+        Категорияны таңдаңыз
       </div>      
     <div class="create-types-container" id="create-types-container">
       <ul class="ks-cboxtags">
-        <li><input type="checkbox" id="checkboxOne" name="Game" value="Game"><label for="checkboxOne">Game</label></li>
-        <li><input type="checkbox" id="checkboxTwo" name="Films" value="Films"><label for="checkboxTwo">Films</label></li>
-        <li><input type="checkbox" id="checkboxThree" name="Programming" value="Programming"><label for="checkboxThree">Programming</label></li>
-        <li><input type="checkbox" id="checkboxFour" name="Anime" value="Anime"><label for="checkboxFour">Anime</label></li>
-        <li><input type="checkbox" id="checkboxFive" name="Sport" value="Sport"><label for="checkboxFive">Sport</label></li>
+        <li><input type="checkbox" id="checkboxOne" name="Game" value="Game"><label for="checkboxOne">Ойындар</label></li>
+        <li><input type="checkbox" id="checkboxTwo" name="Films" value="Films"><label for="checkboxTwo">Фильмдер</label></li>
+        <li><input type="checkbox" id="checkboxThree" name="Programming" value="Programming"><label for="checkboxThree">Бағдарламалау</label></li>
+        <li><input type="checkbox" id="checkboxFour" name="Anime" value="Anime"><label for="checkboxFour">Аниме</label></li>
+        <li><input type="checkbox" id="checkboxFive" name="Sport" value="Sport"><label for="checkboxFive">Спорт</label></li>
       </ul>
     </div>
     <div class="center">
-      <div class="simple-btn" onclick="createPost()">Create</div>
+      <div class="simple-btn" onclick="createPost()">Құру</div>
     </div>
   </form>
 </div>

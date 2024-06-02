@@ -1,9 +1,9 @@
-{{define "title"}}Profile{{end}}
+{{define "title"}}Профиль{{end}}
 {{define "main"}}
     <div class="profile-box">
         <div class="profile-user-in">
             <div class="profile-title">
-                <h1>Profile</h1>
+                <h1>Жеке профиль</h1>
             </div>
             <div class="profile_main_info">
                 <div class="profile-photo-back">
@@ -11,12 +11,12 @@
                 </div>
                 <div class="profile-info">
                     <div class="profile_info_text">
-                        <h3>User name: {{ .Form.Name}}</h3>
-                        <h3 class="profile-email">User email: {{ .Form.Email}}</h3>
+                        <h3>Қолданушы атауы: {{ .Form.Name}}</h3>
+                        <h3 class="profile-email">Email: {{ .Form.Email}}</h3>
                     </div>
                     {{if not .Form.Access}}
                     <div class="profile-info-message-btn-back">
-                        <a class="simple-btn" href="/chat/{{ .Form.Name}}">Message</a>
+                        <a class="simple-btn" href="/chat/{{ .Form.Name}}">Жазу</a>
                     </div>
                     {{end}}
                 </div>
@@ -26,7 +26,7 @@
             </div>
             {{if .Form.Access}}
                 <div class="profile_photo_btn">
-                    <a class="simple-btn" id="change_btn" onclick="openImageFieldProfile()">Change</a>
+                    <a class="simple-btn" id="change_btn" onclick="openImageFieldProfile()">Өзгерту</a>
                 </div>
             {{end}}
             <div class="change-profile-photo" id="change-profile-photo">
@@ -38,13 +38,13 @@
                     </div>
                       <div class="post-image-message"></div>
                       <div class="btn_box">
-                        <a class="simple-btn" id="change_btn_cancel" onclick="closeImageFieldProfile()">Cancel</a>
-                        <div class="simple-btn" onclick="changeProfilePhotoFunc('/user/profile/{{ .Form.Name}}')">Change</div>
+                        <a class="simple-btn" id="change_btn_cancel" onclick="closeImageFieldProfile()">Бас тарту</a>
+                        <div class="simple-btn" onclick="changeProfilePhotoFunc('/user/profile/{{ .Form.Name}}')">Өзгерту</div>
                     </div>
                 </form>
             </div>
             {{if .Form.Access}}
-            <a class="profile-logout-btn" href="/user/logout">Logout</a>
+            <a class="profile-logout-btn" href="/user/logout">Шығу</a>
             {{end}}
         </div>
     </div>
