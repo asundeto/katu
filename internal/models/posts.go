@@ -283,7 +283,7 @@ func (m *Model) Get(id int) (*Post, error) {
 }
 
 func (m *Model) Latest() ([]*Post, error) {
-	stmt := `SELECT id, title, content, created, category, user_name, image FROM posts ORDER BY id DESC LIMIT 10`
+	stmt := `SELECT id, title, content, created, category, user_name, image FROM posts ORDER BY id DESC LIMIT 100`
 	rows, err := m.DB.Query(stmt)
 	if err != nil {
 		return nil, err
