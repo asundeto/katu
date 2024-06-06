@@ -3,22 +3,22 @@ package errorhandler
 import "errors"
 
 var (
-	ErrUserAgrement = errors.New("Accept user agreement!")
-	ErrShortUsername = errors.New("Username is too short!")
-	ErrLongUsername = errors.New("Username is too long!")
-	ErrUsernameStart = errors.New("Username can`t start with number!")
+    ErrUserAgrement = errors.New("Пайдалы ақпаратты қабылдаңыз!")
+    ErrShortUsername = errors.New("Пайдаланушы аты өте қысқа!")
+    ErrLongUsername = errors.New("Пайдаланушы аты өте ұзын!")
+    ErrUsernameStart = errors.New("Пайдаланушы аты санмен басталмауы керек!")
 
-	ErrLongUsernameSymbols = errors.New("User name can`t be longer than 10 symobols")
-	ErrLongEmailSymbols = errors.New("Email can`t be longer than 30 symobols")
-	ErrQuery = errors.New("query error")
-	ErrAlreadyExistUsername = errors.New("User name already exists")
-	ErrAlreadyExistEmail = errors.New("Email already register")
+    ErrLongUsernameSymbols = errors.New("Пайдаланушы аты 10 символдан үлкен болмауы керек")
+    ErrLongEmailSymbols = errors.New("Электрондық пошта 30 символдан үлкен болмауы керек")
+    ErrQuery = errors.New("сұрау қатесі")
+    ErrAlreadyExistUsername = errors.New("Пайдаланушы аты қазірдің бірінде бар")
+    ErrAlreadyExistEmail = errors.New("Электрондық пошта кіріс")
 
-	ErrEnterCorrectEmail = errors.New("Please enter correct email!")
-	ErrPasswordMismatch = errors.New("Password mismatch!")
-	ErrLowPassword = errors.New("Min size of password is 7 Use one of them [$#%!?.*]")
-	ErrAuthServer = errors.New("Server error! Please try later")
+    ErrEnterCorrectEmail = errors.New("Дұрыс электрондық поштаны енгізіңіз!")
+    ErrPasswordMismatch = errors.New("Парольдер сәйкес келмейді!")
+    ErrLowPassword = errors.New("Парольдер міндетті екі үлкен сандардан 7 символдан көп болуы керек [$#%!?.*]")
+    ErrAuthServer = errors.New("Сервер қатесі! Кейінірек көріңіз")
 
-	ErrEmailExist = errors.New("Email is not exists!")
-	ErrIncorrectPassword = errors.New("Password is incorrect!")
+    ErrEmailExist = errors.New("Электрондық пошта жоқ!")
+    ErrIncorrectPassword = errors.New("Пароль дұрыс емес!")
 )
