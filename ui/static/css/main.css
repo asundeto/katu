@@ -1191,13 +1191,13 @@ body {
 
 .all-exist-chats-container.active .chats-wrapper.started-chats-box-inner {
   transition: none;
-  transform: translateX(-600px);
+  transform: translateX(-2000px);
 }
 
 .all-exist-chats-container .chats-wrapper.all-users-box-inner {
   position: absolute;
   transition: none;
-  transform: translateX(600px);
+  transform: translateX(2000px);
 }
 
 .all-exist-chats-container.active .chats-wrapper.all-users-box-inner {
@@ -2463,12 +2463,10 @@ body {
 
   .all-exist-chats-container.active .chats-wrapper.started-chats-box-inner {
     transition: none;
-    transform: translateX(-1200px);
   }
   
   .all-exist-chats-container .chats-wrapper.all-users-box-inner {
     position: absolute;
     transition: none;
-    transform: translateX(1200px);
   }
 }
