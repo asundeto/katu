@@ -1017,6 +1017,37 @@ if (document.getElementById("chat-arrow-back-btn")) {
   activateChatBackBtn()
 }
 
+// ----------------- Search Function ------------------//
+
+const myChatsBoxDiv = document.getElementById('myChatsBox');
+const userRows = Array.from(myChatsBoxDiv.getElementsByClassName('user-row'));
+
+const allUserBoxDiv = document.getElementById('all-user-box');
+const allUserRows = Array.from(allUserBoxDiv.getElementsByClassName('user-row'));
+
+function chatsSearchFunction() {
+  filterChats(document.getElementById('chatsSearch').value)
+}
+
+    function filterChats(filterString) {
+        myChatsBoxDiv.innerHTML = '';
+            const filteredRows1 = userRows.filter(row => {
+            const chatWith1 = row.querySelector('.chat-with').innerText.toLowerCase();
+            return chatWith1.toLowerCase().includes(filterString.toLowerCase());
+        });
+        filteredRows1.forEach(row => {
+            myChatsBoxDiv.appendChild(row.parentNode);
+        });
+        allUserBoxDiv.innerHTML = '';
+            const filteredRows2 = allUserRows.filter(row => {
+            const chatWith2 = row.querySelector('.users-name').innerText.toLowerCase();
+            return chatWith2.toLowerCase().includes(filterString.toLowerCase());
+        });
+        filteredRows2.forEach(row => {
+            allUserBoxDiv.appendChild(row.parentNode);
+        });
+    }
+
 
 
 // --------------------- Message Header Menu ------------------

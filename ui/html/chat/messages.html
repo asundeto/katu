@@ -9,7 +9,7 @@
                     </div>
                     <div class="messages-chat-header-search-back" id="messages-chat-header-search-back">
                         <img class="messages-chat-header-search" src="/static/img/search.png" alt="">
-                        <input type="text" placeholder="Search">
+                        <input id="chatsSearch" type="text" placeholder="Іздеу" onchange="chatsSearchFunction()" oninput="chatsSearchFunction()">
                     </div>
                 </div>
                 <div class="my-chats-box-show" id="my-chats-box-show">
@@ -25,7 +25,7 @@
                     </div>
                     <hr>
                     <div class="all-exist-chats-container active-pop" id="all-exist-chats-container">
-                        <div class="chats-wrapper started-chats-box-inner">
+                        <div class="chats-wrapper started-chats-box-inner" id="myChatsBox">
                             {{if .Form.StartedChats}}
                                 {{range .Form.StartedChats}}
                                     <div onclick="openChat('{{.With}}')">
@@ -62,7 +62,7 @@
                             <h4>No started chats</h4>
                             {{end}}
                         </div>
-                        <div class="chats-wrapper all-users-box-inner">
+                        <div class="chats-wrapper all-users-box-inner" id="all-user-box">
                             {{if .Form.Users}}
                             <div class="users-back">
                                 {{range .Form.Users}}
