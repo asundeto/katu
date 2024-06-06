@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"mime/multipart"
@@ -293,7 +292,6 @@ func (app *Application) uploadImage(path string, file multipart.File, header *mu
 	filename := filepath.Join("ui/static", path, image)
 	out, err := os.Create(filename)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 	defer out.Close()

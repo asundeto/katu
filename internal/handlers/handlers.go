@@ -394,7 +394,6 @@ func (app *Application) SendMessage(w http.ResponseWriter, r *http.Request) {
 	typeImage := false
 	imagePath := ""
 	if message == "" {
-		// fmt.Println("IMAGE", r.FormValue("chatImageInput"))
 		file, header, err := r.FormFile("chatImageInput")
 		if err != nil {
 			return

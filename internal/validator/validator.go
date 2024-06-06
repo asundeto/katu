@@ -1,7 +1,6 @@
 package validator
 
 import (
-	"fmt"
 	"math/rand"
 	"net/http"
 	"os"
@@ -53,7 +52,7 @@ func UserNameCheck(userName string) error {
 	if len(userName) < 4 {
 		return errorhandler.ErrShortUsername
 	}
-	if len(userName) > 10 {
+	if len(userName) > 40 {
 		return errorhandler.ErrLongUsername
 	}
 	if userName[0] >= '0' && userName[0] <= '9' {
@@ -188,7 +187,6 @@ func PathExists(path string) error {
 		// Create the folder if it doesn't exist
 		err := os.MkdirAll(uploadsPath, 0755)
 		if err != nil {
-			fmt.Println("Error creating folder:", err)
 			return err
 		}
 	}
