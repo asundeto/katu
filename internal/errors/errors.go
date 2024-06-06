@@ -15,7 +15,7 @@ var (
     ErrServerError        = errors.New("Сервер қатесі")
     ErrComment            = errors.New("Дұрыс мәнді енгізіңіз")
     ErrIncorrectValue     = errors.New("Дұрыс пішім!")
-    ErrPostTitle          = errors.New("Тақырып ұзындығы 3-тен 40 символға дейін болуы керек!")
+    ErrPostTitle          = errors.New("Тақырып ұзындығы 3-тен 100 символға дейін болуы керек!")
     ErrPostContent        = errors.New("Мазмұн ұзындығы 5-тен 1000 символға дейін болуы керек!")
     ErrPostImageExtension = errors.New("Суреттің форматы: .png .jpg .gif")
     ErrPostImageSize      = errors.New("Сурет өлшемі 20mb-дан асқан!")

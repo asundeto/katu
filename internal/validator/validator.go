@@ -154,7 +154,7 @@ func ValidChatUserName2(r *http.Request) string {
 }
 
 func ValidPostTitle(s string) string {
-	if len(s) < 3 || len(s) > 80 {
+	if len(s) < 3 || len(s) > 200 {
 		return errorhandler.ErrPostTitle.Error()
 	}
 	return ""

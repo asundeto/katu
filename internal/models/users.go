@@ -199,12 +199,12 @@ func (m *UserModel) GetUserStatus(username string) int {
 }
 
 func (m *UserModel) Duplicates(email, name string) error {
-	if len(name) > 10 {
-		return errorhandler.ErrLongUsernameSymbols
-	}
-	if len(email) > 30 {
-		return errorhandler.ErrLongEmailSymbols
-	}
+	// if len(name) > 10 {
+	// 	return errorhandler.ErrLongUsernameSymbols
+	// }
+	// if len(email) > 30 {
+	// 	return errorhandler.ErrLongEmailSymbols
+	// }
 
 	user := User{Email: email, Name: name}
 	var count, count2 int

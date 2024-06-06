@@ -142,10 +142,10 @@ if (dropArea) {
       if (file.type.startsWith('image/')) {
         const imgElement = document.getElementById("show-uploaded-image");
         imgElement.src = URL.createObjectURL(file);
-        imgMessage.innerHTML = "Image upload success";
+        imgMessage.innerHTML = "Сурет қолайлы енгізілді!";
         imgMessage.style.display = "block";
       } else {
-        imgMessage.innerHTML = "Invalid file type!";
+        imgMessage.innerHTML = "Сурет форматы қате!";
         imgMessage.style.display = "block";
       }
     }
