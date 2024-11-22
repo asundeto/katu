@@ -1,6 +1,3 @@
------------------------ InsertChat ERROR 5 --------------------------
------------------------ UpdateChatHistory 1 ------------------------
------------------------ UpdateChatHistory 1 ------------------------
 # Forum 
 
 Welcome to the Web Forum project! This is a web application that allows users to communicate with each other through posts and comments. It also includes features such as category association, post liking and disliking, and post filtering. The project is built using Golang and SQLite.
@@ -51,11 +48,3 @@ To use the Web Forum application, follow these steps:
 3. Create a post by providing a title, content, and one or more categories.
 
 Enjoy communicating and exchanging ideas with other users through the Web Forum!
-
-## Authors
-### asundeto & atemerzh
-
-## header color - #010409
-## border color - #30363d
-## body color - #0d1117
-## boxes color - #0d1117
